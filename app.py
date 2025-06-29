@@ -29,11 +29,13 @@ def create_app():
         return jsonify({'message': 'API is working!'})
 
     # Try to import and register the API blueprint
+    api_error = None  # Store error message here
     try:
         from routes.api_routes import api_bp
         app.register_blueprint(api_bp, url_prefix='/api')
         print("✓ API routes registered successfully")
     except Exception as e:
+        api_error = str(e)  # Save the error message
         print(f"✗ Failed to register API routes: {e}")
         
         # Add a fallback audit endpoint for testing
@@ -41,7 +43,7 @@ def create_app():
         def fallback_audit():
             return jsonify({
                 'success': False,
-                'error': f'API routes not properly loaded: {str(e)}'
+                'error': f'API routes not properly loaded: {api_error}'  # Use saved error
             })
     
     # Try to initialize database

@@ -1,31 +1,43 @@
 # File: services/email_service.py
-# Email service for sending audit reports and notifications
+# Email service using Resend - simple and works!
 
-import smtplib
 import os
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
 from typing import Dict
-from config.settings import EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS
 
 def send_email_report(email: str, audit_data: Dict, pdf_path: str, website_url: str) -> bool:
-    """Send detailed email report"""
+    """Send detailed email report using Resend"""
+    
+    RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')
+    
+    if not RESEND_API_KEY:
+        print("❌ RESEND_API_KEY not set in .env file")
+        return False
+    
     try:
-        msg = MIMEMultipart()
-        msg['From'] = EMAIL_USER
-        msg['To'] = email
-        msg['Subject'] = f"Your AI SEO Audit Results - {audit_data['overall_score']}/100"
+        import resend
+        resend.api_key = RESEND_API_KEY
         
-        # Email body
-        body = f"""
+        # Prepare attachments
+        attachments = []
+        if os.path.exists(pdf_path):
+            with open(pdf_path, 'rb') as f:
+                content = f.read()
+                attachments = [{
+                    "filename": os.path.basename(pdf_path),
+                    "content": list(content)  # Convert bytes to list
+                }]
+        
+        # Get score
+        overall_score = audit_data.get('overall_score', audit_data.get('score', 0))
+        
+        # Create email HTML
+        html_body = f"""
         <html>
         <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #764ba2;">Your AI SEO Audit Results</h2>
             
             <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
-                <h3>Overall Score: {audit_data['overall_score']}/100</h3>
+                <h3>Overall Score: {overall_score}/100</h3>
                 <p><strong>Website:</strong> {website_url}</p>
             </div>
             
@@ -56,31 +68,21 @@ def send_email_report(email: str, audit_data: Dict, pdf_path: str, website_url: 
         </html>
         """
         
-        msg.attach(MIMEText(body, 'html'))
-        
-        # Attach PDF report
-        if os.path.exists(pdf_path):
-            with open(pdf_path, "rb") as attachment:
-                part = MIMEBase('application', 'octet-stream')
-                part.set_payload(attachment.read())
-            
-            encoders.encode_base64(part)
-            part.add_header(
-                'Content-Disposition',
-                f'attachment; filename= {os.path.basename(pdf_path)}'
-            )
-            msg.attach(part)
-        
         # Send email
-        server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
-        server.starttls()
-        server.login(EMAIL_USER, EMAIL_PASS)
-        text = msg.as_string()
-        server.sendmail(EMAIL_USER, email, text)
-        server.quit()
+        response = resend.Emails.send({
+            "from": "SEO Auditor <onboarding@resend.dev>",
+            "to": email,
+            "subject": f"Your AI SEO Audit Results - {overall_score}/100",
+            "html": html_body,
+            "attachments": attachments
+        })
         
+        print(f"✅ Email sent successfully to {email} via Resend!")
         return True
         
+    except ImportError:
+        print("❌ Resend not installed. Run: pip install resend")
+        return False
     except Exception as e:
-        print(f"Email sending failed: {e}")
+        print(f"❌ Resend error: {e}")
         return False

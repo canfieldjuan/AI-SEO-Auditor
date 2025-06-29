@@ -1,9 +1,9 @@
-# File: services/web_scraper.py
-# Web scraping service for extracting website data and metadata
+# Save this as services/web_scraper_fix.py
+# Then rename your current web_scraper.py to ai_service.py
+# Then rename this file to web_scraper.py
 
 import requests
 from bs4 import BeautifulSoup
-import json
 from typing import Dict
 
 def scrape_website(url: str) -> Dict:
@@ -18,7 +18,6 @@ def scrape_website(url: str) -> Dict:
         
         soup = BeautifulSoup(response.content, 'html.parser')
         
-        # Extract comprehensive website data
         website_data = {
             'url': url,
             'title': soup.find('title').get_text() if soup.find('title') else '',
@@ -33,10 +32,8 @@ def scrape_website(url: str) -> Dict:
             'content_length': len(soup.get_text()),
             'has_schema': bool(soup.find('script', {'type': 'application/ld+json'})),
             'schema_types': [],
-            'page_speed': None,  # Would need PageSpeed API
-            'mobile_friendly': None,  # Would need Mobile-Friendly Test API
             'ssl_certificate': url.startswith('https://'),
-            'content_text': soup.get_text()[:5000],  # First 5000 chars for AI analysis
+            'content_text': soup.get_text()[:5000],
             'meta_keywords': '',
             'canonical_url': '',
             'open_graph': {},
@@ -49,26 +46,6 @@ def scrape_website(url: str) -> Dict:
         if meta_desc:
             website_data['meta_description'] = meta_desc.get('content', '')
         
-        # Extract meta keywords
-        meta_keywords = soup.find('meta', attrs={'name': 'keywords'})
-        if meta_keywords:
-            website_data['meta_keywords'] = meta_keywords.get('content', '')
-        
-        # Extract canonical URL
-        canonical = soup.find('link', attrs={'rel': 'canonical'})
-        if canonical:
-            website_data['canonical_url'] = canonical.get('href', '')
-        
-        # Extract Open Graph data
-        og_tags = soup.find_all('meta', property=lambda x: x and x.startswith('og:'))
-        for tag in og_tags:
-            website_data['open_graph'][tag.get('property')] = tag.get('content')
-        
-        # Extract Twitter Card data
-        twitter_tags = soup.find_all('meta', attrs={'name': lambda x: x and x.startswith('twitter:')})
-        for tag in twitter_tags:
-            website_data['twitter_cards'][tag.get('name')] = tag.get('content')
-        
         # Count links
         all_links = soup.find_all('a', href=True)
         for link in all_links:
@@ -77,17 +54,6 @@ def scrape_website(url: str) -> Dict:
                 website_data['external_links'] += 1
             elif href.startswith('/') or url in href:
                 website_data['internal_links'] += 1
-        
-        # Extract structured data
-        scripts = soup.find_all('script', {'type': 'application/ld+json'})
-        for script in scripts:
-            try:
-                data = json.loads(script.string)
-                website_data['structured_data'].append(data)
-                if isinstance(data, dict) and '@type' in data:
-                    website_data['schema_types'].append(data['@type'])
-            except:
-                pass
         
         return website_data
         

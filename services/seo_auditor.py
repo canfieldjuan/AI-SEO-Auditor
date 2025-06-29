@@ -46,15 +46,16 @@ class SEOAuditor:
             # Step 5: Send email report
             email_sent = send_email_report(email, audit_data, pdf_path, url)
             
-            if email_sent:
-                logger.info(f'Email report sent successfully for {url}')
+            if not email_sent:
+                logger.warning(f'Email report not sent for {url}')
             else:
-                logger.warning(f'Failed to send email report for {url}')
+                logger.info(f'Email report sent successfully for {url}')
             
             # Prepare response data
             response_data = {
                 'success': True,
                 'score': audit_data.get('overall_score', 70),
+                'overall_score': audit_data.get('overall_score', 70),  # Include both fields
                 'issues': (audit_data.get('critical_issues', []) + 
                           audit_data.get('warnings', []) + 
                           audit_data.get('ai_search_issues', []))[:8],  # Limit to 8 issues for display
@@ -63,7 +64,9 @@ class SEOAuditor:
                 'categories': audit_data.get('category_scores', {}),
                 'email_sent': email_sent,
                 'quick_wins': audit_data.get('quick_wins', []),
-                'voice_search_issues': audit_data.get('voice_search_issues', [])
+                'voice_search_issues': audit_data.get('voice_search_issues', []),
+                'critical_issues': audit_data.get('critical_issues', []),  # Add for cached email sending
+                'ai_search_issues': audit_data.get('ai_search_issues', [])  # Add for cached email sending
             }
             
             logger.info(f'Audit completed successfully for {url} with score {response_data["score"]}')
@@ -79,6 +82,10 @@ class SEOAuditor:
     def send_cached_report(self, email: str, cached_data: Dict, url: str) -> bool:
         """Send email report for cached audit data"""
         try:
+            # Fix missing overall_score immediately
+            if 'overall_score' not in cached_data:
+                cached_data['overall_score'] = cached_data.get('score', 70)
+            
             # Generate fresh PDF from cached data
             website_data = {'url': url}  # Minimal website data for PDF
             pdf_path = generate_pdf_report(cached_data, website_data)
