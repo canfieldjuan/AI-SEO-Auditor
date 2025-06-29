@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Enhanced SEO Services | Future-Proof Your Business</title>
+    <meta name="description" content="Get found in AI search results while your competitors disappear. AI-enhanced SEO services that dominate Google AI, ChatGPT, and voice search.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .cta-button.large {
+            padding: 18px 36px;
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .hero h2 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .warning-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .warning-box h3 {
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section.white {
+            background: white;
+        }
+
+        .section.gray {
+            background: #f8f9fa;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .column {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #764ba2;
+        }
+
+        .column p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+        }
+
+        .pricing h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .pricing-card {
+            background: white;
+            color: #333;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-card.popular {
+            transform: scale(1.05);
+            border: 3px solid #ff6b6b;
+        }
+
+        .popular-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #764ba2;
+            margin: 20px 0;
+        }
+
+        .price-period {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .features {
+            list-style: none;
+            margin: 30px 0;
+        }
+
+        .features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .features li:before {
+            content: "✅ ";
+            margin-right: 10px;
+        }
+
+        /* Case Study */
+        .case-study {
+            background: #f8f9fa;
+            padding: 60px 40px;
+            border-radius: 15px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .case-study h3 {
+            font-size: 2rem;
+            color: #764ba2;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* FAQ */
+        .faq-item {
+            background: white;
+            margin: 20px 0;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-question {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 15px;
+        }
+
+        .faq-answer {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero h2 {
+                font-size: 1.3rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.popular {
+                transform: none;
+            }
+
+            .three-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Lead Capture Form */
+        .lead-form {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .form-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #764ba2;
+            outline: none;
+        }
+
+        .countdown {
+            background: #ff6b6b;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">AI-Enhanced SEO</div>
+            <a href="#audit" class="cta-button">Get Free Audit</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Your SEO Is About to Become OBSOLETE</h1>
+            <h2>Get Ready for the AI Search Revolution (Or Watch Your Competitors Disappear You)</h2>
+            
+            <div class="warning-box">
+                <h3>⚠️ URGENT: Google Just Changed Everything</h3>
+                <p>While you were focused on traditional SEO, Google quietly revolutionized search:</p>
+                <ul style="text-align: left; max-width: 600px; margin: 20px auto;">
+                    <li><strong>AI Overviews now appear in 18.76% of all searches</strong></li>
+                    <li><strong>Traditional organic traffic dropping 25% by 2026</strong></li>
+                    <li><strong>800 billion facts now processed through Google's AI system</strong></li>
+                </ul>
+                <p><strong>The businesses adapting to AI search are capturing customers. The ones ignoring it are becoming invisible.</strong></p>
+            </div>
+
+            <a href="#audit" class="cta-button large">CLAIM YOUR FREE AI-READINESS AUDIT</a>
+        </div>
+    </section>
+
+    <!-- The 3 Critical Changes -->
+    <section class="section white">
+        <div class="container">
+            <h2>The 3 Critical Changes Happening RIGHT NOW</h2>
+            
+            <div class="three-column">
+                <div class="column">
+                    <h3>🤖 AI Answers Replace Blue Links</h3>
+                    <p>Google now gives direct AI-generated answers instead of sending people to websites. If you're not optimized for AI, <strong>you don't exist.</strong></p>
+                </div>
+                
+                <div class="column">
+                    <h3>🗣️ Voice Search Dominates Mobile</h3>
+                    <p>50% of consumers use voice search daily. They ask questions like humans, not like robots typing keywords.</p>
+                </div>
+                
+                <div class="column">
+                    <h3>📱 Search Happens Everywhere</h3>
+                    <p>Your customers find businesses through ChatGPT, social media, shopping apps, and voice assistants—not just Google.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 40px 0;">
+                <h3 style="color: #ff6b6b; font-size: 1.5rem;">Bottom Line: Traditional SEO strategies are like using a flip phone in 2025.</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Study -->
+    <section class="section gray">
+        <div class="container">
+            <div class="case-study">
+                <h3>Real Results: Hunter Talent Agency Case Study</h3>
+                <p style="font-size: 1.2rem; margin: 20px 0;">"We started AI-enhanced SEO from day one. Today, the brand brings in seven figures annually, and we've never run paid ads."</p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number">7-Figure</div>
+                        <div class="stat-label">Annual Revenue</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">85%</div>
+                        <div class="stat-label">From Organic Traffic</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">$0</div>
+                        <div class="stat-label">Spent on Ads</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">25%</div>
+                        <div class="stat-label">More Revenue vs Traditional SEO</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <h2>Choose Your AI SEO Package</h2>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>🚀 AI-Ready Starter</h3>
+                    <div class="price">$1,200<span class="price-period">/month</span></div>
+                    <p>Perfect for businesses ready to test AI-enhanced SEO</p>
+                    <ul class="features">
+                        <li>2 AI-optimized articles per month</li>
+                        <li>Basic schema markup for AI extraction</li>
+                        <li>AI Overview optimization</li>
+                        <li>Voice search optimization</li>
+                        <li>Monthly performance reports</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="#contact" class="cta-button large">Get Started</a>
+                </div>
+
+                <div class="pricing-card popular">
+                    <div class="popular-badge">⭐ MOST POPULAR</div>
+                    <h3>⚡ AI-Enhanced Growth</h3>
+                    <div class="price">$2,500<span class="price-period">/month</span></div>
+                    <p>Complete AI search domination system</p>
+                    <ul class="features">
+                        <li>4 AI-optimized articles per month</li>
+                        <li>Complete semantic SEO audit</li>
+                        <li>Multi-platform search optimization</li>
+                        <li>Competitor AI strategy analysis</li>
+                        <li>Advanced schema markup</li>
+                        <li>Bi-weekly strategy calls</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#contact" class="cta-button large">Get Started</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>🏆 AI-Dominance Enterprise</h3>
+                    <div class="price">$4,500<span class="price-period">/month</span></div>
+                    <p>Total market domination across all search platforms</p>
+                    <ul class="features">
+                        <li>8 AI-optimized articles per month</li>
+                        <li>Custom AI tools development</li>
+                        <li>Comprehensive competitor intelligence</li>
+                        <li>White-label partnership opportunities</li>
+                        <li>Advanced technical optimization</li>
+                        <li>Weekly strategy sessions</li>
+                        <li>Direct access to AI SEO specialists</li>
+                    </ul>
+                    <a href="#contact" class="cta-button large">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section white">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q: How is this different from regular SEO?</div>
+                <div class="faq-answer">A: Regular SEO optimizes for Google's old algorithm. AI-Enhanced SEO optimizes for how search actually works in 2025—through AI systems, voice queries, and multi-platform search.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Q: Will this work for my industry?</div>
+                <div class="faq-answer">A: AI search affects every industry. Whether you're B2B, ecommerce, local services, or SaaS, your customers are using AI to find solutions.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Q: How quickly will I see results?</div>
+                <div class="faq-answer">A: AI search visibility can happen within 4-6 weeks. Traditional rankings take 3-6 months. We focus on both for maximum impact.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Q: What if AI search doesn't take off?</div>
+                <div class="faq-answer">A: It already has. AI Overviews appear in nearly 19% of searches and growing. Plus, everything we do also improves your traditional SEO.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Free Audit Section -->
+    <section class="section gray" id="audit">
+        <div class="container">
+            <h2>⏰ Limited Time: Free AI-Readiness Audit</h2>
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 30px;">We'll analyze your current SEO setup and show you exactly:</p>
+            
+            <div class="three-column">
+                <div class="column">
+                    <h3>✅ AI Search Visibility</h3>
+                    <p>How visible you are in AI search results</p>
+                </div>
+                <div class="column">
+                    <h3>✅ Voice Search Gaps</h3>
+                    <p>What voice search opportunities you're missing</p>
+                </div>
+                <div class="column">
+                    <h3>✅ Competitor Analysis</h3>
+                    <p>Which AI search platforms your competitors dominate</p>
+                </div>
+            </div>
+
+            <div class="lead-form">
+                <div class="countdown">
+                    🚨 FREE for the first 25 businesses only! (Normally $497)
+                </div>
+                
+                <h3>Get Your FREE AI-Readiness Audit</h3>
+                <form id="auditForm">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="website">Website URL *</label>
+                        <input type="url" id="website" name="website" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="business">Business Type *</label>
+                        <select id="business" name="business" required>
+                            <option value="">Select your business type</option>
+                            <option value="ecommerce">Ecommerce</option>
+                            <option value="saas">SaaS</option>
+                            <option value="local">Local Services</option>
+                            <option value="b2b">B2B Services</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="revenue">Monthly Revenue Range</label>
+                        <select id="revenue" name="revenue">
+                            <option value="">Select range</option>
+                            <option value="0-10k">$0 - $10k</option>
+                            <option value="10k-50k">$10k - $50k</option>
+                            <option value="50k-100k">$50k - $100k</option>
+                            <option value="100k+">$100k+</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="cta-button large">CLAIM MY FREE AUDIT NOW</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section white" id="contact">
+        <div class="container">
+            <h2>Ready to Future-Proof Your Business?</h2>
+            <p style="text-align: center; font-size: 1.2rem; max-width: 800px; margin: 0 auto 40px;">The SEO landscape changed forever in 2025. The businesses that adapt early will dominate their markets for the next decade.</p>
+            
+            <div style="text-align: center;">
+                <p style="font-size: 1.3rem; font-weight: bold; color: #ff6b6b; margin-bottom: 30px;">Don't let your competitors get there first.</p>
+                <a href="#audit" class="cta-button large">GET MY FREE AUDIT NOW</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 AI-Enhanced SEO Services. All rights reserved.</p>
+            <p>P.S. - We only accept 10 new clients per month to ensure quality results. If you're serious about dominating AI search, don't wait.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Form submission handler
+        document.getElementById('auditForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Here you would typically send to your backend
+            // For now, we'll just show a success message
+            alert('Thank you! We\'ll send your free AI-readiness audit within 24 hours.');
+            
+            // You can integrate with services like:
+            // - Google Sheets API
+            // - Airtable API  
+            // - Your own backend
+            // - Email services like ConvertKit
+            
+            console.log('Form data:', data);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
