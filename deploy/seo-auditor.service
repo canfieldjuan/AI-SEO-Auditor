@@ -1,0 +1,43 @@
+# File: deploy/seo-auditor.service
+# Systemd service file for SEO Auditor production deployment
+
+[Unit]
+Description=SEO Auditor Production Server
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/seo-auditor
+Environment=PATH=/opt/seo-auditor/venv/bin
+Environment=FLASK_ENV=production
+Environment=PYTHONPATH=/opt/seo-auditor
+EnvironmentFile=/opt/seo-auditor/.env
+ExecStart=/opt/seo-auditor/venv/bin/python run_production.py --bind 0.0.0.0:5000 --workers 4
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=30
+PrivateTmp=true
+Restart=always
+RestartSec=10
+
+# Security settings
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/seo-auditor/logs /opt/seo-auditor/cache /opt/seo-auditor/reports
+PrivateDevices=true
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target

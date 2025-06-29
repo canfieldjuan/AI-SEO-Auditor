@@ -1,0 +1,90 @@
+# File: docker-compose.yml
+# Multi-container setup for SEO Auditor with optional services
+
+version: '3.8'
+
+services:
+  seo-auditor:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - WORKERS=4
+      - TIMEOUT=120
+      - BIND_ADDRESS=0.0.0.0:5000
+      - LOG_LEVEL=info
+    env_file:
+      - .env
+    volumes:
+      - ./reports:/app/reports
+      - ./cache:/app/cache
+      - ./logs:/app/logs
+      - ./seo_audits.db:/app/seo_audits.db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    # Log rotation via Docker
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+  # Log rotation service
+  logrotate:
+    image: linkyard/docker-logrotate
+    volumes:
+      - ./logs:/var/log/app
+      - ./deploy/logrotate.conf:/etc/logrotate.d/app
+    restart: unless-stopped
+    depends_on:
+      - seo-auditor
+
+  # Optional: Redis for enhanced caching
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Optional: Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - seo-auditor
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  redis_data:

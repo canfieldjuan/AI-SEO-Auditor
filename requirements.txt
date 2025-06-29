@@ -1,0 +1,14 @@
+# File: requirements.txt
+# Python dependencies for the SEO Auditor application
+
+Flask==2.3.3
+Flask-CORS==4.0.0
+requests==2.31.0
+beautifulsoup4==4.12.2
+openai==0.28.1
+reportlab==4.0.4
+python-dotenv==1.0.0
+lxml==4.9.3
+gunicorn==21.2.0
+gevent==23.7.0
+pytest==7.4.2

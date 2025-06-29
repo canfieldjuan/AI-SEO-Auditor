@@ -1,0 +1,7 @@
+2025-06-29 11:43:03,214 - __main__ - INFO - Gunicorn version 21.2.0 found
+2025-06-29 11:43:03,230 - __main__ - INFO - Log directory ready: C:\Users\Juan\OneDrive\Desktop\seo_auditor_tool\ai_auditor\logs
+2025-06-29 11:43:07,119 - __main__ - INFO - Gevent available - using async workers for better I/O performance
+2025-06-29 11:43:07,166 - __main__ - INFO - Gevent available - using async workers for better I/O performance
+2025-06-29 11:43:07,181 - __main__ - INFO - 
+2025-06-29 11:43:07,181 - __main__ - INFO - Starting Gunicorn server...
+2025-06-29 11:43:10,515 - __main__ - ERROR - Check logs/error.log for details
