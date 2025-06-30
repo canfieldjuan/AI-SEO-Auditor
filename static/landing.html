@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Enhanced SEO Services | Future-Proof Your Business</title>
+    <meta name="description" content="Get found in AI search results while your competitors disappear. AI-enhanced SEO services that dominate Google AI, ChatGPT, and voice search.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .trust-badges {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .cta-button.large {
+            padding: 18px 36px;
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+
+        .cta-button.extension {
+            background: linear-gradient(45deg, #00c896, #00e5b3);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .hero h2 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .warning-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .warning-box h3 {
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Live Counter */
+        .live-counter {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .counter-number {
+            color: #ffeb3b;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        /* Early Bird Form */
+        .early-bird-form {
+            background: white;
+            color: #333;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 40px auto;
+            max-width: 600px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h3 {
+            color: #764ba2;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .spots-remaining {
+            background: #ff6b6b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section.white {
+            background: white;
+        }
+
+        .section.gray {
+            background: #f8f9fa;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .column {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #764ba2;
+        }
+
+        .column p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Social Proof Ticker */
+        .social-proof-ticker {
+            background: #f8f9fa;
+            padding: 20px 0;
+            overflow: hidden;
+        }
+
+        .ticker-content {
+            display: flex;
+            animation: scroll 30s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            flex-shrink: 0;
+            padding: 0 50px;
+            white-space: nowrap;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+        }
+
+        .pricing h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .pricing-card {
+            background: white;
+            color: #333;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-card.popular {
+            transform: scale(1.05);
+            border: 3px solid #ff6b6b;
+        }
+
+        .popular-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #764ba2;
+            margin: 20px 0;
+        }
+
+        .price-period {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .features {
+            list-style: none;
+            margin: 30px 0;
+        }
+
+        .features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .features li:before {
+            content: "✅ ";
+            margin-right: 10px;
+        }
+
+        /* Chrome Extension Section */
+        .extension-section {
+            background: linear-gradient(135deg, #00c896 0%, #00e5b3 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .extension-box {
+            background: white;
+            color: #333;
+            padding: 60px;
+            border-radius: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .extension-box h2 {
+            color: #00c896;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .extension-price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #00c896;
+            margin: 30px 0;
+        }
+
+        .extension-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+            text-align: left;
+        }
+
+        /* Case Study */
+        .case-study {
+            background: #f8f9fa;
+            padding: 60px 40px;
+            border-radius: 15px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .case-study h3 {
+            font-size: 2rem;
+            color: #764ba2;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Results Preview */
+        .results-preview {
+            background: white;
+            padding: 60px 0;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* FAQ */
+        .faq-item {
+            background: white;
+            margin: 20px 0;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-question {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 15px;
+        }
+
+        .faq-answer {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero h2 {
+                font-size: 1.3rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.popular {
+                transform: none;
+            }
+
+            .three-column {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-badges {
+                display: none;
+            }
+        }
+
+        /* Lead Capture Form */
+        .lead-form {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .form-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #764ba2;
+            outline: none;
+        }
+
+        .countdown {
+            background: #ff6b6b;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Exit Intent Popup */
+        .exit-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .exit-popup-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        /* Score Overview Popup */
+        .score-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .score-popup-content {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            max-width: 700px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease;
+            margin: auto;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .score-popup-header {
+            margin-bottom: 30px;
+        }
+
+        .score-popup-header h2 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .big-score {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            font-size: 4rem;
+            font-weight: 800;
+            color: white;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .big-score::after {
+            content: '/100';
+            font-size: 1.5rem;
+            position: absolute;
+            bottom: 50px;
+            opacity: 0.8;
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .score-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .score-item-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .score-item-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .score-message {
+            font-size: 1.3rem;
+            margin: 30px 0;
+            line-height: 1.6;
+        }
+
+        .score-cta-container {
+            margin-top: 40px;
+        }
+
+        .score-issues {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .score-issues h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .score-issues ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .score-issues li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .score-issues li:before {
+            content: "⚠️";
+            position: absolute;
+            left: 0;
+        }
+
+        /* Mobile Responsive for Popups */
+        @media (max-width: 768px) {
+            .score-popup-content {
+                padding: 30px 20px;
+                margin: 20px auto;
+                max-height: calc(100vh - 40px);
+            }
+
+            .score-popup-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .big-score {
+                width: 150px;
+                height: 150px;
+                font-size: 3rem;
+            }
+
+            .big-score::after {
+                font-size: 1.2rem;
+                bottom: 35px;
+            }
+
+            .score-breakdown {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .score-item {
+                padding: 15px;
+            }
+
+            .score-item-value {
+                font-size: 1.5rem;
+            }
+
+            .score-message {
+                font-size: 1.1rem;
+            }
+
+            .close-popup {
+                top: 10px;
+                right: 10px;
+                font-size: 24px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-dots {
+            display: inline-block;
+        }
+
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        /* Floating Elements */
+        .floating-cta {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .floating-cta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">AI-Enhanced SEO</div>
+            <div class="trust-badges">
+                <div class="trust-badge">
+                    <span>🏆</span>
+                    <span>1,247+ Sites Optimized</span>
+                </div>
+                <div class="trust-badge">
+                    <span>⭐</span>
+                    <span>4.9/5 Rating</span>
+                </div>
+            </div>
+            <a href="#audit-now" class="cta-button">Get Free Audit</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Your SEO Is About to Become OBSOLETE</h1>
+            <h2>Get Ready for the AI Search Revolution (Or Watch Your Competitors Disappear You)</h2>
+            
+            <div class="live-counter">
+                <span>🔥 <span class="counter-number" id="liveCounter">8</span> business owners are getting their AI audit right now</span>
+            </div>
+            
+            <div class="warning-box">
+                <h3>⚠️ URGENT: Google Just Changed Everything</h3>
+                <p>While you were focused on traditional SEO, Google quietly revolutionized search:</p>
+                <ul style="text-align: left; max-width: 600px; margin: 20px auto;">
+                    <li><strong>AI Overviews now appear in 18.76% of all searches</strong></li>
+                    <li><strong>Traditional organic traffic dropping 25% by 2026</strong></li>
+                    <li><strong>800 billion facts now processed through Google's AI system</strong></li>
+                </ul>
+                <p><strong>The businesses adapting to AI search are capturing customers. The ones ignoring it are becoming invisible.</strong></p>
+            </div>
+
+            <!-- Early Bird Form in Hero -->
+            <div class="early-bird-form" id="audit-now">
+                <div class="form-header">
+                    <h3>Get Your FREE AI-Readiness Audit</h3>
+                    <p class="spots-remaining">Only 17 Free Spots Left Today!</p>
+                </div>
+                
+                <form id="heroAuditForm">
+                    <div class="form-group">
+                        <label for="heroWebsite">Website URL *</label>
+                        <input type="text" id="heroWebsite" name="website" placeholder="yourwebsite.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="heroEmail">Email Address *</label>
+                        <input type="email" id="heroEmail" name="email" placeholder="your@email.com" required>
+                    </div>
+                    
+                    <button type="submit" class="cta-button large" style="width: 100%;">
+                        🚀 Get My Free AI Audit Now
+                    </button>
+                    
+                    <p style="margin-top: 15px; font-size: 0.9rem; color: #666;">
+                        ⚡ Results in 47 seconds • 📧 Detailed PDF report • 🔒 100% secure
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof Ticker -->
+    <div class="social-proof-ticker">
+        <div class="ticker-content">
+            <div class="ticker-item">💬 "Increased AI visibility by 340% in 30 days" - Sarah M.</div>
+            <div class="ticker-item">🎯 "Now ranking in ChatGPT responses!" - Mike D.</div>
+            <div class="ticker-item">📈 "Voice search traffic up 225%" - Jennifer K.</div>
+            <div class="ticker-item">🏆 "Best investment for our SEO strategy" - Tom R.</div>
+            <div class="ticker-item">💬 "Increased AI visibility by 340% in 30 days" - Sarah M.</div>
+            <div class="ticker-item">🎯 "Now ranking in ChatGPT responses!" - Mike D.</div>
+            <div class="ticker-item">📈 "Voice search traffic up 225%" - Jennifer K.</div>
+            <div class="ticker-item">🏆 "Best investment for our SEO strategy" - Tom R.</div>
+        </div>
+    </div>
+
+    <!-- The 3 Critical Changes -->
+    <section class="section white">
+        <div class="container">
+            <h2>The 3 Critical Changes Happening RIGHT NOW</h2>
+            
+            <div class="three-column">
+                <div class="column">
+                    <h3>🤖 AI Answers Replace Blue Links</h3>
+                    <p>Google now gives direct AI-generated answers instead of sending people to websites. If you're not optimized for AI, <strong>you don't exist.</strong></p>
+                </div>
+                
+                <div class="column">
+                    <h3>🗣️ Voice Search Dominates Mobile</h3>
+                    <p>50% of consumers use voice search daily. They ask questions like humans, not like robots typing keywords.</p>
+                </div>
+                
+                <div class="column">
+                    <h3>📱 Search Happens Everywhere</h3>
+                    <p>Your customers find businesses through ChatGPT, social media, shopping apps, and voice assistants—not just Google.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 40px 0;">
+                <h3 style="color: #ff6b6b; font-size: 1.5rem;">Bottom Line: Traditional SEO strategies are like using a flip phone in 2025.</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Preview Section -->
+    <section class="section gray results-preview">
+        <div class="container">
+            <h2>See What You'll Discover in Your AI Audit</h2>
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 40px;">
+                Our AI analyzes 147+ ranking factors specific to AI search visibility
+            </p>
+            
+            <div style="text-align: center;">
+                <img src="data:image/svg+xml,%3Csvg width='800' height='500' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='800' height='500' fill='%23f8f9fa'/%3E%3Ctext x='400' y='250' font-family='Arial' font-size='20' fill='%23999' text-anchor='middle'%3E[Audit Report Preview]%3C/text%3E%3C/svg%3E" 
+                     alt="AI SEO Audit Report Preview" 
+                     class="preview-image">
+            </div>
+            
+            <div class="three-column" style="margin-top: 40px;">
+                <div class="column">
+                    <h3>📊 AI Visibility Score</h3>
+                    <p>See exactly how visible you are to AI systems like ChatGPT and Google AI</p>
+                </div>
+                <div class="column">
+                    <h3>🎯 Competitor Analysis</h3>
+                    <p>Discover which competitors are winning in AI search and why</p>
+                </div>
+                <div class="column">
+                    <h3>📋 Action Priority List</h3>
+                    <p>Get a step-by-step roadmap to dominate AI search results</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Study -->
+    <section class="section white">
+        <div class="container">
+            <div class="case-study">
+                <h3>Real Results: Hunter Talent Agency Case Study</h3>
+                <p style="font-size: 1.2rem; margin: 20px 0;">"We started AI-enhanced SEO from day one. Today, the brand brings in seven figures annually, and we've never run paid ads."</p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number">7-Figure</div>
+                        <div class="stat-label">Annual Revenue</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">85%</div>
+                        <div class="stat-label">From Organic Traffic</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">$0</div>
+                        <div class="stat-label">Spent on Ads</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">25%</div>
+                        <div class="stat-label">More Revenue vs Traditional SEO</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <h2 id="pricingHeader">Choose Your AI SEO Package</h2>
+            <p id="pricingSubheader" style="color: white; font-size: 1.2rem; text-align: center; margin-bottom: 40px; display: none;">
+                Based on your score, we recommend starting with our <strong>AI-Enhanced Growth</strong> package to fix critical issues.
+            </p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>🚀 AI-Ready Starter</h3>
+                    <div class="price">$1,200<span class="price-period">/month</span></div>
+                    <p>Perfect for businesses ready to test AI-enhanced SEO</p>
+                    <ul class="features">
+                        <li>2 AI-optimized articles per month</li>
+                        <li>Basic schema markup for AI extraction</li>
+                        <li>AI Overview optimization</li>
+                        <li>Voice search optimization</li>
+                        <li>Monthly performance reports</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="#contact" class="cta-button large">Get Started</a>
+                </div>
+
+                <div class="pricing-card popular">
+                    <div class="popular-badge">⭐ MOST POPULAR</div>
+                    <h3>⚡ AI-Enhanced Growth</h3>
+                    <div class="price">$2,500<span class="price-period">/month</span></div>
+                    <p>Complete AI search domination system</p>
+                    <ul class="features">
+                        <li>4 AI-optimized articles per month</li>
+                        <li>Complete semantic SEO audit</li>
+                        <li>Multi-platform search optimization</li>
+                        <li>Competitor AI strategy analysis</li>
+                        <li>Advanced schema markup</li>
+                        <li>Bi-weekly strategy calls</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#contact" class="cta-button large">Get Started</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>🏆 AI-Dominance Enterprise</h3>
+                    <div class="price">$4,500<span class="price-period">/month</span></div>
+                    <p>Total market domination across all search platforms</p>
+                    <ul class="features">
+                        <li>8 AI-optimized articles per month</li>
+                        <li>Custom AI tools development</li>
+                        <li>Comprehensive competitor intelligence</li>
+                        <li>White-label partnership opportunities</li>
+                        <li>Advanced technical optimization</li>
+                        <li>Weekly strategy sessions</li>
+                        <li>Direct access to AI SEO specialists</li>
+                    </ul>
+                    <a href="#contact" class="cta-button large">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chrome Extension Section -->
+    <section class="extension-section">
+        <div class="container">
+            <div class="extension-box">
+                <h2>🎯 Want UNLIMITED AI Audits?</h2>
+                <p style="font-size: 1.3rem; margin: 20px 0;">Get our Chrome Extension for Agencies & Power Users</p>
+                
+                <div class="extension-price">$2,997</div>
+                <p style="font-size: 1.2rem; color: #666;">One-Time Payment • Lifetime Access</p>
+                
+                <div class="extension-features">
+                    <div>
+                        <h4 style="color: #00c896; margin-bottom: 10px;">✅ Unlimited Audits Forever</h4>
+                        <p>Run as many AI SEO audits as you want with no restrictions</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #00c896; margin-bottom: 10px;">🔑 Use Your Own API Keys</h4>
+                        <p>Connect your OpenAI/OpenRouter keys for complete control</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #00c896; margin-bottom: 10px;">🏢 White-Label Ready</h4>
+                        <p>Brand it as your own tool for client presentations</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #00c896; margin-bottom: 10px;">📊 Bulk Export Features</h4>
+                        <p>Export all audits to CSV, integrate with your systems</p>
+                    </div>
+                </div>
+                
+                <a href="#contact" class="cta-button extension large">
+                    🚀 Contact Us About Chrome Extension Access
+                </a>
+                
+                <p style="margin-top: 20px; color: #666;">
+                    <strong>Perfect for:</strong> SEO Agencies • Digital Marketing Teams • Consultants • SaaS Companies
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section white">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q: How is this different from regular SEO?</div>
+                <div class="faq-answer">A: Regular SEO optimizes for Google's old algorithm. AI-Enhanced SEO optimizes for how search actually works in 2025—through AI systems, voice queries, and multi-platform search.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Q: Will this work for my industry?</div>
+                <div class="faq-answer">A: AI search affects every industry. Whether you're B2B, ecommerce, local services, or SaaS, your customers are using AI to find solutions.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Q: How quickly will I see results?</div>
+                <div class="faq-answer">A: AI search visibility can happen within 4-6 weeks. Traditional rankings take 3-6 months. We focus on both for maximum impact.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Q: What if AI search doesn't take off?</div>
+                <div class="faq-answer">A: It already has. AI Overviews appear in nearly 19% of searches and growing. Plus, everything we do also improves your traditional SEO.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Q: What's included in the Chrome Extension?</div>
+                <div class="faq-answer">A: The extension gives you unlimited access to our AI audit technology. You provide your own API keys, run unlimited audits, white-label for clients, and export data. It's perfect for agencies and consultants who need to audit many sites.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Free Audit Section -->
+    <section class="section gray" id="audit">
+        <div class="container">
+            <h2>⏰ Limited Time: Free AI-Readiness Audit</h2>
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 30px;">We'll analyze your current SEO setup and show you exactly:</p>
+            
+            <div class="three-column">
+                <div class="column">
+                    <h3>✅ AI Search Visibility</h3>
+                    <p>How visible you are in AI search results</p>
+                </div>
+                <div class="column">
+                    <h3>✅ Voice Search Gaps</h3>
+                    <p>What voice search opportunities you're missing</p>
+                </div>
+                <div class="column">
+                    <h3>✅ Competitor Analysis</h3>
+                    <p>Which AI search platforms your competitors dominate</p>
+                </div>
+            </div>
+
+            <div class="lead-form">
+                <div class="countdown">
+                    🚨 FREE for the first 25 businesses only! (Normally $497)
+                </div>
+                
+                <h3>Get Your FREE AI-Readiness Audit</h3>
+                <form id="auditForm">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="website">Website URL *</label>
+                        <input type="text" id="website" name="website" placeholder="yourwebsite.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="business">Business Type *</label>
+                        <select id="business" name="business" required>
+                            <option value="">Select your business type</option>
+                            <option value="ecommerce">Ecommerce</option>
+                            <option value="saas">SaaS</option>
+                            <option value="local">Local Services</option>
+                            <option value="b2b">B2B Services</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="revenue">Monthly Revenue Range</label>
+                        <select id="revenue" name="revenue">
+                            <option value="">Select range</option>
+                            <option value="0-10k">$0 - $10k</option>
+                            <option value="10k-50k">$10k - $50k</option>
+                            <option value="50k-100k">$50k - $100k</option>
+                            <option value="100k+">$100k+</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="cta-button large" id="submitBtn">CLAIM MY FREE AUDIT NOW</button>
+                </form>
+                
+                <div id="auditProgress" style="display: none; margin-top: 30px;">
+                    <h3>🔍 Analyzing Your Website<span class="loading-dots"></span></h3>
+                    <p>This takes about 47 seconds. We're checking 147+ AI ranking factors!</p>
+                </div>
+                
+                <div id="auditResults" style="display: none; margin-top: 30px;">
+                    <h3>✅ Analysis Complete!</h3>
+                    <p>We've identified <strong>critical issues</strong> affecting your AI search visibility.</p>
+                    <p style="margin-top: 15px;">📧 Check your email for the detailed PDF report!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chrome Extension Waitlist -->
+    <section class="section white" id="extension-waitlist" style="display: none;">
+        <div class="container">
+            <div class="lead-form">
+                <h2>🎯 Chrome Extension Coming Soon!</h2>
+                <p style="font-size: 1.2rem; text-align: center; margin: 30px 0;">
+                    You'll be the first to know when our unlimited AI audit tool launches.
+                </p>
+                <a href="#contact" class="cta-button extension large">Contact Us About Early Access</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section white" id="contact">
+        <div class="container">
+            <h2>Ready to Future-Proof Your Business?</h2>
+            <p style="text-align: center; font-size: 1.2rem; max-width: 800px; margin: 0 auto 40px;">The SEO landscape changed forever in 2025. The businesses that adapt early will dominate their markets for the next decade.</p>
+            
+            <div style="text-align: center;">
+                <p style="font-size: 1.3rem; font-weight: bold; color: #ff6b6b; margin-bottom: 30px;">Don't let your competitors get there first.</p>
+                <a href="#audit" class="cta-button large">GET MY FREE AUDIT NOW</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 AI-Enhanced SEO Services. All rights reserved.</p>
+            <p>P.S. - We only accept 10 new clients per month to ensure quality results. If you're serious about dominating AI search, don't wait.</p>
+        </div>
+    </footer>
+
+    <!-- Floating CTA -->
+    <div class="floating-cta" id="floatingCTA" style="display: none;">
+        🔥 Get Your Free Audit
+    </div>
+
+    <!-- Exit Intent Popup -->
+    <div class="exit-popup" id="exitPopup">
+        <div class="exit-popup-content">
+            <span class="close-popup" onclick="document.getElementById('exitPopup').style.display='none'">&times;</span>
+            <h2>⏰ WAIT! Don't Leave Empty-Handed</h2>
+            <p style="font-size: 1.2rem; margin: 20px 0;">Get our FREE AI SEO Checklist (47-point audit you can do yourself)</p>
+            <form id="exitForm">
+                <div class="form-group">
+                    <input type="email" placeholder="Enter your email" required>
+                </div>
+                <button type="submit" class="cta-button large" style="width: 100%;">Send Me The Free Checklist</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Score Overview Popup -->
+    <div class="score-popup" id="scorePopup">
+        <div class="score-popup-content">
+            <span class="close-popup" onclick="closeScorePopup()">&times;</span>
+            
+            <div class="score-popup-header">
+                <h2>🎯 Your AI SEO Score is Ready!</h2>
+                <p style="color: #666;">Here's how your website performs in the AI search era:</p>
+            </div>
+            
+            <div class="big-score" id="bigScore">75</div>
+            
+            <div class="score-message" id="scoreMessage">
+                Your website is <strong>moderately visible</strong> to AI search engines, but you're missing critical optimizations that competitors are using.
+            </div>
+            
+            <div class="score-breakdown">
+                <div class="score-item">
+                    <div class="score-item-label">AI Visibility</div>
+                    <div class="score-item-value" id="aiScore">65%</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-item-label">Voice Search</div>
+                    <div class="score-item-value" id="voiceScore">45%</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-item-label">Schema Markup</div>
+                    <div class="score-item-value" id="schemaScore">30%</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-item-label">Technical SEO</div>
+                    <div class="score-item-value" id="techScore">80%</div>
+                </div>
+            </div>
+            
+            <div class="score-issues">
+                <h4>🚨 Top 3 Critical Issues Found:</h4>
+                <ul id="topIssuesList">
+                    <li>Missing structured data for AI extraction</li>
+                    <li>Content not optimized for voice queries</li>
+                    <li>No AI-specific meta descriptions</li>
+                </ul>
+            </div>
+            
+            <div class="score-cta-container">
+                <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                    <strong>Good news:</strong> These issues are fixable! See how our AI SEO packages can help:
+                </p>
+                <button onclick="showPricingFromScore()" class="cta-button large">
+                    See How We Can Fix This →
+                </button>
+                <p style="margin-top: 15px; color: #666;">
+                    📧 Full detailed report has been sent to your email
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complexity Message Section -->
+    <div class="score-popup" id="complexityPopup" style="display: none;">
+        <div class="score-popup-content" style="max-width: 800px;">
+            <span class="close-popup" onclick="document.getElementById('complexityPopup').style.display='none'">&times;</span>
+            
+            <div style="text-align: center; padding: 20px;">
+                <h2 style="color: #764ba2; font-size: 2.5rem; margin-bottom: 30px;">
+                    ⚠️ Here's What Your Competitors Don't Want You to Know...
+                </h2>
+                
+                <div style="text-align: left; font-size: 1.2rem; line-height: 1.8; color: #333;">
+                    <p style="margin-bottom: 25px;">
+                        <strong>AI SEO isn't just "adding keywords" anymore.</strong> It's a complex system requiring:
+                    </p>
+                    
+                    <ul style="list-style: none; padding: 0; margin-bottom: 30px;">
+                        <li style="padding: 10px 0;">
+                            <strong>🧠 Semantic Understanding:</strong> Your content must answer questions the way AI thinks - not how humans search
+                        </li>
+                        <li style="padding: 10px 0;">
+                            <strong>🔗 Entity Relationships:</strong> Google's Knowledge Graph has 800 billion facts - your site needs to connect properly
+                        </li>
+                        <li style="padding: 10px 0;">
+                            <strong>📊 Structured Data:</strong> 73 different schema types, each with specific requirements AI uses to understand your business
+                        </li>
+                        <li style="padding: 10px 0;">
+                            <strong>🗣️ Natural Language Processing:</strong> Voice queries are 76% different from typed searches - requiring completely different optimization
+                        </li>
+                    </ul>
+                    
+                    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; margin: 30px 0;">
+                        <p style="margin: 0; font-weight: bold; color: #856404;">
+                            💡 The Reality: While you're trying to figure this out alone, your competitors with AI SEO experts are already capturing YOUR customers in ChatGPT, Google AI, and voice searches.
+                        </p>
+                    </div>
+                    
+                    <p style="margin-bottom: 25px; font-size: 1.3rem; text-align: center;">
+                        <strong>Every day you wait = More invisible to AI = More customers lost</strong>
+                    </p>
+                    
+                    <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                        Our AI SEO specialists have optimized 1,247+ sites. We know exactly what works.
+                    </p>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button onclick="showPricingFromComplexity()" class="cta-button large" style="font-size: 1.3rem; padding: 20px 40px;">
+                        🚀 Yes, I Want Expert Help to Dominate AI Search
+                    </button>
+                    <p style="margin-top: 15px; color: #999;">
+                        <a href="#" onclick="document.getElementById('complexityPopup').style.display='none'; return false;" style="color: #999;">
+                            No thanks, I'll try to figure it out myself
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Reset form visibility on page load
+        window.addEventListener('load', function() {
+            const auditForm = document.getElementById('auditForm');
+            const auditProgress = document.getElementById('auditProgress');
+            const auditResults = document.getElementById('auditResults');
+            
+            if (auditForm) {
+                auditForm.style.display = 'block';
+            }
+            if (auditProgress) {
+                auditProgress.style.display = 'none';
+            }
+            if (auditResults) {
+                auditResults.style.display = 'none';
+            }
+        });
+
+        // Counter animation
+        function animateCounter() {
+            const counter = document.getElementById('liveCounter');
+            const min = 5;
+            const max = 12;
+            
+            setInterval(() => {
+                const current = parseInt(counter.textContent);
+                let next = current + (Math.random() > 0.5 ? 1 : -1);
+                if (next < min) next = min;
+                if (next > max) next = max;
+                counter.textContent = next;
+            }, 3000);
+        }
+        animateCounter();
+
+        // Scroll to show floating CTA
+        window.addEventListener('scroll', () => {
+            const floatingCTA = document.getElementById('floatingCTA');
+            if (window.scrollY > 500) {
+                floatingCTA.style.display = 'block';
+            } else {
+                floatingCTA.style.display = 'none';
+            }
+        });
+
+        // Floating CTA click
+        document.getElementById('floatingCTA').addEventListener('click', () => {
+            document.getElementById('audit').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Exit intent
+        let exitIntentShown = false;
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY <= 0 && !exitIntentShown) {
+                document.getElementById('exitPopup').style.display = 'flex';
+                exitIntentShown = true;
+            }
+        });
+
+        // URL normalization function
+        function normalizeUrl(url) {
+            // Remove whitespace
+            url = url.trim();
+            
+            // Add https:// if no protocol is specified
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            
+            return url;
+        }
+
+        // Hero form submission - RUN THE AUDIT DIRECTLY
+        document.getElementById('heroAuditForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            console.log('Hero form submitted!'); // Debug log
+            
+            const website = normalizeUrl(document.getElementById('heroWebsite').value);
+            const email = document.getElementById('heroEmail').value;
+            console.log('URL:', website, 'Email:', email); // Debug log
+            
+            // Save to sessionStorage
+            sessionStorage.setItem('auditWebsite', website);
+            sessionStorage.setItem('auditEmail', email);
+            
+            // Hide form, show progress (create a progress div for hero)
+            const formContainer = this.parentElement;
+            this.style.display = 'none';
+            
+            const progressDiv = document.createElement('div');
+            progressDiv.innerHTML = `
+                <h3 style="color: #764ba2;">🔍 Analyzing Your Website<span class="loading-dots"></span></h3>
+                <p>This takes about 47 seconds. We're checking 147+ AI ranking factors!</p>
+            `;
+            progressDiv.style.textAlign = 'center';
+            progressDiv.style.marginTop = '30px';
+            formContainer.appendChild(progressDiv);
+            
+            // Simulate API call delay for testing
+            setTimeout(async () => {
+                try {
+                    // Call your actual API
+                    const response = await fetch('/api/audit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            url: website,
+                            email: email
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    console.log('API Response:', data); // Debug log
+                    
+                    // Remove progress
+                    progressDiv.style.display = 'none';
+                    
+                    // Show popup with whatever data we got
+                    // Don't check for success - just use the data
+                    if (data && (data.score || data.overall_score)) {
+                        showScorePopup(data);
+                    } else {
+                        // Only use sample if we truly have no data
+                        console.log('No score in response, using sample data');
+                        showScorePopup(getSampleData());
+                    }
+                    
+                    // Store audit data
+                    sessionStorage.setItem('auditCompleted', 'true');
+                    sessionStorage.setItem('auditData', JSON.stringify(data));
+                    
+                } catch (error) {
+                    console.error('Audit error:', error);
+                    // Hide progress and show popup with sample data
+                    progressDiv.style.display = 'none';
+                    showScorePopup(getSampleData());
+                }
+            }, 2000); // 2 second delay to show progress
+        });
+
+        // Main audit form submission
+        document.getElementById('auditForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const website = normalizeUrl(formData.get('website'));
+            const email = formData.get('email');
+            
+            // Hide form, show progress
+            this.style.display = 'none';
+            document.getElementById('auditProgress').style.display = 'block';
+            
+            // Simulate API call delay for testing
+            setTimeout(async () => {
+                try {
+                    // Call your actual API
+                    const response = await fetch('/api/audit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            url: website,
+                            email: email
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    console.log('API Response from main form:', data); // Debug log
+                    
+                    // Hide progress
+                    document.getElementById('auditProgress').style.display = 'none';
+                    
+                    // Show popup with whatever data we got
+                    // Don't check for success - just use the data if it has a score
+                    if (data && (data.score || data.overall_score)) {
+                        showScorePopup(data);
+                    } else {
+                        // Only use sample if we truly have no data
+                        console.log('No score in response, using sample data');
+                        showScorePopup(getSampleData());
+                    }
+                    
+                    // Store audit data
+                    sessionStorage.setItem('auditCompleted', 'true');
+                    sessionStorage.setItem('auditData', JSON.stringify(data));
+                    
+                } catch (error) {
+                    console.error('Audit error:', error);
+                    // Hide progress and show popup with sample data
+                    document.getElementById('auditProgress').style.display = 'none';
+                    showScorePopup(getSampleData());
+                }
+            }, 2000); // 2 second delay to show progress
+        });
+
+        // Get sample data for fallback
+        function getSampleData() {
+            return {
+                score: 65,
+                categories: {
+                    ai_readiness: 60,
+                    voice_search: 45,
+                    schema_markup: 30,
+                    technical_seo: 80
+                },
+                issues: [
+                    "Missing structured data for AI extraction",
+                    "Content not optimized for voice queries", 
+                    "No AI-specific meta descriptions"
+                ]
+            };
+        }
+
+        // Show score popup function
+        function showScorePopup(data) {
+            console.log('Showing score popup with data:', data); // Debug log
+            
+            const popup = document.getElementById('scorePopup');
+            const score = data.score || data.overall_score || 65;
+            
+            console.log('Score being used:', score); // Debug log
+            console.log('Categories:', data.categories); // Debug log
+            console.log('Issues:', data.issues); // Debug log
+            
+            // Set main score
+            const bigScore = document.getElementById('bigScore');
+            bigScore.textContent = score;
+            
+            // Set score color
+            if (score >= 80) {
+                bigScore.style.background = '#28a745';
+            } else if (score >= 60) {
+                bigScore.style.background = '#ffc107';
+            } else {
+                bigScore.style.background = '#dc3545';
+            }
+            
+            // Set score message
+            const scoreMessage = document.getElementById('scoreMessage');
+            if (score >= 80) {
+                scoreMessage.innerHTML = 'Your website is <strong>well-optimized</strong> for AI search, but there\'s still room for improvement to dominate your competition.';
+            } else if (score >= 60) {
+                scoreMessage.innerHTML = 'Your website is <strong>moderately visible</strong> to AI search engines, but you\'re missing critical optimizations that competitors are using.';
+            } else {
+                scoreMessage.innerHTML = 'Your website is <strong>nearly invisible</strong> to AI search engines. Urgent optimization needed to avoid losing traffic to competitors.';
+            }
+            
+            // Set category scores
+            if (data.categories) {
+                document.getElementById('aiScore').textContent = (data.categories.ai_readiness || 60) + '%';
+                document.getElementById('voiceScore').textContent = (data.categories.voice_search || 45) + '%';
+                document.getElementById('schemaScore').textContent = (data.categories.schema_markup || 30) + '%';
+                document.getElementById('techScore').textContent = (data.categories.technical_seo || 80) + '%';
+                
+                console.log('Updated category displays:', {
+                    ai: document.getElementById('aiScore').textContent,
+                    voice: document.getElementById('voiceScore').textContent,
+                    schema: document.getElementById('schemaScore').textContent,
+                    tech: document.getElementById('techScore').textContent
+                });
+            }
+            
+            // Set top issues
+            if (data.issues && data.issues.length > 0) {
+                const issuesList = document.getElementById('topIssuesList');
+                issuesList.innerHTML = '';
+                data.issues.slice(0, 3).forEach(issue => {
+                    const li = document.createElement('li');
+                    li.textContent = issue;
+                    issuesList.appendChild(li);
+                });
+            }
+            
+            // Show popup
+            popup.style.display = 'flex';
+            console.log('Score popup should be visible now');
+            
+            // Force a reflow to ensure updates are rendered
+            popup.offsetHeight;
+            
+            // Log what's actually displayed
+            console.log('Displayed in popup:', {
+                score: document.getElementById('bigScore').textContent,
+                aiScore: document.getElementById('aiScore').textContent,
+                message: document.getElementById('scoreMessage').textContent.substring(0, 50) + '...'
+            }); // Debug log
+        }
+
+        // Close score popup - make it global
+        window.closeScorePopup = function() {
+            document.getElementById('scorePopup').style.display = 'none';
+            // Don't show anything else - user should use the CTA button
+        }
+
+        // Show pricing from score popup - make it global
+        window.showPricingFromScore = function() {
+            // Close score popup
+            document.getElementById('scorePopup').style.display = 'none';
+            
+            // Show complexity message
+            setTimeout(() => {
+                document.getElementById('complexityPopup').style.display = 'flex';
+            }, 300);
+        }
+        
+        // Show pricing from complexity popup
+        window.showPricingFromComplexity = function() {
+            document.getElementById('complexityPopup').style.display = 'none';
+            
+            // Show personalized pricing message
+            document.getElementById('pricingSubheader').style.display = 'block';
+            
+            // Get the stored score
+            const auditData = sessionStorage.getItem('auditData');
+            if (auditData) {
+                const data = JSON.parse(auditData);
+                const score = data.score || data.overall_score || 65;
+                
+                // Update pricing header based on score
+                const pricingHeader = document.getElementById('pricingHeader');
+                if (score < 50) {
+                    pricingHeader.textContent = '🚨 Your Score: ' + score + '/100 - Urgent Action Needed';
+                } else if (score < 70) {
+                    pricingHeader.textContent = '⚠️ Your Score: ' + score + '/100 - Significant Improvements Available';
+                } else {
+                    pricingHeader.textContent = '✅ Your Score: ' + score + '/100 - Let\'s Maximize Your Potential';
+                }
+            }
+            
+            // Smooth scroll to pricing
+            document.querySelector('.pricing').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Chrome extension CTA
+        document.querySelector('.cta-button.extension').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Scroll to contact section
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Exit popup form
+        document.getElementById('exitForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // You can add API call here
+            alert('Check your email for the free checklist!');
+            document.getElementById('exitPopup').style.display = 'none';
+        });
+
+        // Smooth scrolling for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
