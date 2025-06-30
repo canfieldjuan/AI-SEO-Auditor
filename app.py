@@ -20,6 +20,10 @@ def create_app():
         else:
             return "Index.html not found in static directory"
 
+    @app.route('/landing')
+    def landing():
+         return send_from_directory('static', 'landing.html')
+
     @app.route('/health')
     def health_check():
         return jsonify({'status': 'healthy', 'version': '2.0.0'})
