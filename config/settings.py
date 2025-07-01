@@ -20,11 +20,20 @@ CACHE_DIR = os.getenv('CACHE_DIR', 'cache')
 LOGS_DIR = os.getenv('LOGS_DIR', 'logs')
 STATIC_DIR = os.getenv('STATIC_DIR', 'static')
 
-# Email Configuration
+# Email Configuration (Legacy SMTP - kept for backward compatibility)
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
 EMAIL_USER = os.getenv('EMAIL_USER', '')  # Your email
 EMAIL_PASS = os.getenv('EMAIL_PASS', '')  # Your app password
+
+# Email Service Configuration (Resend)
+RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')
+RESEND_FROM_EMAIL = os.getenv('RESEND_FROM_EMAIL', '')
+
+# Email Marketing Configuration - WITH SAFE DEFAULTS SO APP RUNS!
+BOOKING_URL = os.getenv('BOOKING_URL', 'https://example.com/contact')
+STRATEGY_CALL_VALUE = os.getenv('STRATEGY_CALL_VALUE', '0')
+VISITOR_VALUE_USD = int(os.getenv('VISITOR_VALUE_USD', '50'))
 
 # API Keys
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')

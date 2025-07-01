@@ -1,309 +1,609 @@
 # File: services/email_service.py
-# Email service using Resend – dynamic audit report + product offer
+# Email service using Resend – now with built-in product offer
 
 import os
 import random
 import base64
 import html
-from typing import Dict, List
+from typing import Dict
 
-# ---------------------------------------------------------------------------
-# Configuration (ENV **required**) ------------------------------------------------
-# ---------------------------------------------------------------------------
-BOOKING_URL: str = os.getenv("BOOKING_URL")
-if not BOOKING_URL:
-    raise ValueError("BOOKING_URL environment variable is required")
+# Configuration - use defaults so app runs without setup
+BOOKING_URL = os.getenv('BOOKING_URL', 'https://example.com/contact')
+STRATEGY_CALL_VALUE = os.getenv('STRATEGY_CALL_VALUE', '0')
+VISITOR_VALUE_USD = int(os.getenv('VISITOR_VALUE_USD', '50'))
 
-STRATEGY_CALL_VALUE: str = os.getenv("STRATEGY_CALL_VALUE", "297")
-VISITOR_VALUE_USD: int = int(os.getenv("VISITOR_VALUE_USD", "50"))
-
-# ---------------------------------------------------------------------------
-# Public API -----------------------------------------------------------------
-# ---------------------------------------------------------------------------
 
 def send_email_report(email: str, audit_data: Dict, pdf_path: str, website_url: str) -> bool:
-    """Generate a personalised SEO‑audit e‑mail and send it through Resend.
-
-    Parameters
-    ----------
-    email : str
-        Recipient address.
-    audit_data : Dict
-        Dict produced by the audit engine (scores, issues, etc.).
-    pdf_path : str
-        Optional path to a PDF report to attach.
-    website_url : str
-        Canonical site URL ­– used for subject lines & template replacements.
-    """
-
-    # --- Environment --------------------------------------------------------
-    RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
-    RESEND_FROM_EMAIL: str | None = os.getenv("RESEND_FROM_EMAIL")
+    """Send detailed email report using Resend and include a product upsell."""
+    RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')
+    RESEND_FROM_EMAIL = os.getenv('RESEND_FROM_EMAIL', 'onboarding@resend.dev')  # Default to resend's demo email
 
     if not RESEND_API_KEY:
         print("❌ RESEND_API_KEY not set in .env file")
         return False
-    if not RESEND_FROM_EMAIL:
-        print("❌ RESEND_FROM_EMAIL not set in .env file")
-        return False
 
-    # -----------------------------------------------------------------------
     try:
-        import resend  # lazy import so the module remains optional when testing
+        import resend
         resend.api_key = RESEND_API_KEY
-    except ImportError:
-        print("❌ resend not installed. Run: pip install resend")
-        return False
 
-    # -----------------------------------------------------------------------
-    # Attach PDF (if present) -------------------------------------------------
-    attachments: List[Dict] = []
-    if pdf_path and os.path.exists(pdf_path):
-        with open(pdf_path, "rb") as f:
-            content: bytes = f.read()
-        attachments.append({
-            "filename": os.path.basename(pdf_path),
-            "content": base64.b64encode(content).decode(),  # Resend expects base64
+        # Prepare attachments
+        attachments = []
+        if pdf_path and os.path.exists(pdf_path):
+            with open(pdf_path, 'rb') as f:
+                content = f.read()
+                attachments = [{
+                    "filename": os.path.basename(pdf_path),
+                    "content": base64.b64encode(content).decode()
+                }]
+
+        # Get score
+        overall_score = audit_data.get('overall_score', audit_data.get('score', 0))
+        
+        # Add website_url to audit_data for template functions
+        audit_data['website_url'] = website_url
+
+        # Determine score segment & template
+        score_segment = get_score_segment(overall_score)
+        html_body = get_email_template(score_segment, audit_data)
+
+        # Personalize
+        user_name = audit_data.get('user_name') or email.split('@')[0].replace('.', ' ').title()
+        # Extract business name from website URL
+        business_name = website_url.replace('https://', '').replace('http://', '').replace('www.', '').split('/')[0].split('.')[0].title()
+        
+        # Calculate Google overlook metric (example calculation - adjust as needed)
+        google_overlooks = audit_data.get('estimated_monthly_traffic_loss', 1000) * 2.847  # Mock calculation
+        
+        # Add website_url to audit_data for template functions
+        audit_data['website_url'] = website_url
+        
+        html_body = personalize_email_body(html_body, {
+            'businessName': business_name,  # Use business name instead of userName
+            'websiteUrl': website_url,
+            'googleOverlooks': f"{int(google_overlooks):,}"
         })
 
-    # -----------------------------------------------------------------------
-    # Derive key metrics ------------------------------------------------------
-    overall_score: int = audit_data.get("overall_score", audit_data.get("score", 0))
-    score_segment: str = _get_score_segment(overall_score)
-    critical_issues: List[str] = audit_data.get("critical_issues", [])
-    recommendations: List[str] = audit_data.get("recommendations", [])
-    critical_count: int = len(critical_issues)
+        # Get all dynamic content
+        recommendations = audit_data.get('recommendations', [])
+        critical_issues = audit_data.get('critical_issues', [])
+        
+        # Centralized replacements
+        replacements = {
+            'recommendations': '<ul>' + ''.join(f'<li>{html.escape(rec)}</li>' for rec in recommendations) + '</ul>',
+            'critical_issues': '<ul>' + ''.join(f'<li>{html.escape(issue)}</li>' for issue in critical_issues) + '</ul>',
+            'score': str(overall_score),
+            'critical_count': str(len(critical_issues))
+        }
+        
+        # Apply all replacements
+        for key, value in replacements.items():
+            html_body = html_body.replace(f'{{{{{key}}}}}', value)
 
-    # Keep these values in audit_data for helper functions that expect them
-    audit_data.setdefault("overall_score", overall_score)
-    audit_data.setdefault("critical_count", critical_count)
+        # Subject line
+        audit_data['website_url'] = website_url
+        subject = personalize_subject_line(
+            "Your SEO Audit Report for {{websiteUrl}} – Score: " + str(overall_score),
+            audit_data
+        )
 
-    # -----------------------------------------------------------------------
-    # Build HTML body --------------------------------------------------------
-    html_body: str = _get_email_template(score_segment, audit_data)
-
-    user_name: str = audit_data.get("user_name") or email.split("@")[0].replace(".", " ").title()
-
-    testimonial_html: str = _generate_dynamic_testimonials(audit_data)
-    offer_html: str = _generate_offer_html(audit_data)
-
-    # Centralised placeholder replacement
-    replacements: Dict[str, str] = {
-        "userName":            html.escape(user_name),
-        "testimonials":        testimonial_html,
-        "product_offer":       offer_html,
-        "recommendations":     "<ul>" + "".join(f"<li>{html.escape(r)}</li>" for r in recommendations) + "</ul>",
-        "critical_issues":     "<ul>" + "".join(f"<li>{html.escape(i)}</li>" for i in critical_issues) + "</ul>",
-        "score":               str(overall_score),
-        "critical_count":      str(critical_count),
-    }
-
-    for k, v in replacements.items():
-        html_body = html_body.replace(f"{{{{{k}}}}}", v)
-
-    # -----------------------------------------------------------------------
-    # Subject line -----------------------------------------------------------
-    audit_data["website_url"] = website_url  # normalise key for helper
-    subject: str = _personalise_subject_line(audit_data)
-
-    # -----------------------------------------------------------------------
-    # Send via Resend ---------------------------------------------------------
-    try:
+        # Send email
         response = resend.Emails.send({
             "from": f"SEO Auditor <{RESEND_FROM_EMAIL}>",
             "to": email,
             "subject": subject,
             "html": html_body,
-            "attachments": attachments,
+            "attachments": attachments
         })
-        print(f"✅ Email sent successfully to {email}")
+
+        print(f"✅ Email sent successfully to {email} via Resend!")
         return True
-    except Exception as exc:  # noqa: BLE001 – show all Resend errors
-        print(f"❌ Resend error: {exc}")
+
+    except ImportError:
+        print("❌ Resend not installed. Run: pip install resend")
+        return False
+    except Exception as e:
+        print(f"❌ Resend error: {e}")
         return False
 
-# ---------------------------------------------------------------------------
-# Helper functions – kept *private* (underscored) ---------------------------
-# ---------------------------------------------------------------------------
 
-def _get_score_segment(score: int) -> str:
+# ---------- Helper Functions ----------
+
+def get_score_segment(score: int) -> str:
     if score >= 80:
-        return "high"
-    if score >= 60:
-        return "medium"
-    return "low"
+        return 'high'
+    elif score >= 60:
+        return 'medium'
+    return 'low'
 
 
-def _get_email_template(segment: str, audit_data: Dict | None = None) -> str:
-    """Return a HTML template with placeholders."""
-
+def get_email_template(segment: str, audit_data: Dict = None) -> str:
+    """Return dynamic, conversion-focused email template based on audit findings"""
+    
     if audit_data is None:
         audit_data = {}
-
-    industry = html.escape(audit_data.get("industry", "your industry"))
-    competitors = [html.escape(c) for c in audit_data.get("top_competitors", [])]
-    estimated_traffic_loss = audit_data.get("estimated_monthly_traffic_loss", 0)
-    visitor_value = audit_data.get("visitor_value", VISITOR_VALUE_USD)
+    
+    # Extract key data for personalization
+    industry = html.escape(audit_data.get('industry', 'your industry'))
+    competitors = [html.escape(c) for c in audit_data.get('top_competitors', [])]
+    estimated_traffic_loss = audit_data.get('estimated_monthly_traffic_loss', 0)
+    visitor_value = audit_data.get('visitor_value', VISITOR_VALUE_USD)
     revenue_impact = estimated_traffic_loss * visitor_value
-
-    main_issue = html.escape(audit_data.get("main_technical_issue", "SEO issues"))
-
-    templates: Dict[str, str] = {
-        "high": f"""
-            <h2 style='color:#1e88e5;'>Hi {{userName}}, You're Outperforming 73% of {industry} Websites… but Money Is Leaking Out</h2>
-            <p>While your site scored <strong>{{score}}/100</strong>, you miss about <strong>{estimated_traffic_loss:,} visitors/mo</strong>. That's roughly <strong>${revenue_impact:,}‑a‑month</strong> gone.</p>
-            <div style='background:#fff3cd;padding:15px;border-left:4px solid #ffc107;margin:20px 0;'>
-                🚨 {competitors[0] if competitors else 'A competitor'} just levelled‑up their SEO and is siphoning traffic that should be yours.
+    main_issue = html.escape(audit_data.get('main_technical_issue', ''))
+    website_url = audit_data.get('website_url', audit_data.get('websiteUrl', 'your website'))
+    
+    templates = {
+        'high': f"""
+            <h2 style="color: #333; font-size: 28px; font-weight: 600; margin-bottom: 10px;">{{{{businessName}}}}, Google Overlooked Your Website {{{{googleOverlooks}}}} Times Last Month</h2>
+            
+            <p style="font-size: 18px; color: #555; margin-bottom: 20px;">Your SEO audit revealed <strong style="color: #1976d2;">{{{{critical_count}}}} optimization opportunities</strong> that explain why you're not maximizing Google's new algorithm.</p>
+            
+            <div style="background: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h3 style="margin-top: 0; color: #333;">Areas for Improvement:</h3>
+                {{{{critical_issues}}}}
             </div>
-            {{recommendations}}
-            <h3>Good news</h3>
-            <p>Most fixes are one‑hour jobs. Clients typically see <strong>+40% traffic in 60 days</strong>.</p>
-            {{product_offer}}
-            {{testimonials}}
+            
+            <p style="font-size: 16px; line-height: 1.6;">Good news: Your site scored {{{{score}}}}/100. But here's what matters more – Google's entire ranking system is changing, and even high-performing sites need to adapt.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">The Shift Nobody's Talking About</h3>
+            
+            <p>Google's search algorithm isn't just updating anymore – it's transforming. And most SEO agencies are about as prepared as Blockbuster was for Netflix.</p>
+            
+            <p>Your current agency isn't failing you intentionally. They're just... slow.</p>
+            
+            <p>Think about it:</p>
+            <ul style="line-height: 1.8;">
+                <li>They need 3 months to "analyze" your situation</li>
+                <li>Another 3 months to get "stakeholder buy-in"</li>
+                <li>6 more months to "implement phase one"</li>
+            </ul>
+            
+            <p>Meanwhile, Google's algorithm has evolved three times.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">Why Most Agencies Can't Keep Up</h3>
+            
+            <p><strong>Traditional SEO agencies</strong> are like cruise ships. Changing direction takes forever. By the time they've updated their playbooks and retrained their teams... Google's moved on.</p>
+            
+            <p><strong>Full-service marketing firms</strong> treat SEO like one dish at a buffet. They're juggling social media, PPC, email marketing – SEO gets maybe 10% of their attention. Google changes 100% of its algorithm.</p>
+            
+            <p><strong>Even good technical SEO agencies</strong> are stuck in the old paradigm:</p>
+            <ul style="line-height: 1.8;">
+                <li>They're still optimizing for keywords while Google's rewarding intent</li>
+                <li>They're building backlinks while Google's analyzing user behavior</li>
+                <li>They're focused on technical checkboxes while Google's gone full AI</li>
+            </ul>
+            
+            <h3 style="color: #333; margin-top: 30px;">We're Built Different</h3>
+            
+            <p>We're not a cruise ship. We're a speedboat.</p>
+            
+            <p>We're not trying to be everything to everyone. We're a Google-first rapid response team.</p>
+            
+            <ul style="line-height: 1.8;">
+                <li>No board meetings to approve common sense</li>
+                <li>No 6-month roadmaps for 6-day fixes</li>
+                <li>No committees debating while your rankings tank</li>
+            </ul>
+            
+            <p>We've spent the last 8 months inside Google's new ecosystem. Not theorizing about it. Not reading about it. Actually testing what works NOW.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">Here's Your Advantage</h3>
+            
+            <p>Your competitors are stuck with the same slow-moving agencies. You're already ahead – imagine the gap when you're optimized for tomorrow's Google while they're still catching up to yesterday's.</p>
+            
+            <p>We implement in days what takes them months. Because we've already done the learning. We know exactly what Google wants TODAY, not what worked in 2023.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">The Timeline That Matters</h3>
+            
+            <p>In 6-8 months, sites optimized for the old Google will become invisible. Your good score today won't protect you from obsolete optimization tomorrow.</p>
+            
+            <p>You can maintain your lead, or watch smaller, more agile competitors pass you by.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">The Bottom Line</h3>
+            
+            <p>You don't need another agency. You need a nimble partner who's already where Google is heading.</p>
+            
+            <p>Your audit shows {{{{critical_count}}}} areas for improvement. We can optimize them all. But more importantly, we can optimize them for the Google that's coming, not the Google that's leaving.</p>
+            
+            <hr style="margin: 40px 0;">
+            
+            <p style="font-style: italic; color: #666;"><strong>P.S.</strong> – Your high score gives you a head start. Don't waste it.</p>
         """,
-        "medium": f"""
-            <h2 style='color:#ffc107;'>{{userName}}, You're Bleeding {estimated_traffic_loss:,} Visitors Every Month</h2>
-            <p>Your audit revealed <strong>{{critical_count}}</strong> critical SEO issues blocking first‑page rankings.</p>
-            <div style='background:#ffebee;padding:15px;border-left:4px solid #e53935;margin:20px 0;'>
-                At ${visitor_value} per visitor, that's roughly <strong>${revenue_impact:,}/mo</strong> heading to competitors.
+        
+        'medium': f"""
+            <h2 style="color: #333; font-size: 28px; font-weight: 600; margin-bottom: 10px;">{{{{businessName}}}}, Google Overlooked Your Website {{{{googleOverlooks}}}} Times Last Month</h2>
+            
+            <p style="font-size: 18px; color: #555; margin-bottom: 20px;">Your SEO audit revealed <strong style="color: #d32f2f;">{{{{critical_count}}}} critical issues</strong> that explain why you're invisible to Google's new algorithm.</p>
+            
+            <div style="background: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h3 style="margin-top: 0; color: #333;">Critical Issues Found:</h3>
+                {{{{critical_issues}}}}
             </div>
-            <h3>Top issue: {main_issue}</h3>
-            {{critical_issues}}
-            {{recommendations}}
-            {{product_offer}}
-            {{testimonials}}
+            
+            <p style="font-size: 16px; line-height: 1.6;">These issues are fixable. But here's what your current SEO team doesn't know: fixing them for yesterday's Google won't help you rank tomorrow.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">The Shift Nobody's Talking About</h3>
+            
+            <p>Google's search algorithm isn't just updating anymore – it's transforming. And most SEO agencies are about as prepared as Blockbuster was for Netflix.</p>
+            
+            <p>Your current agency isn't failing you intentionally. They're just... slow.</p>
+            
+            <p>Think about it:</p>
+            <ul style="line-height: 1.8;">
+                <li>They need 3 months to "analyze" your situation</li>
+                <li>Another 3 months to get "stakeholder buy-in"</li>
+                <li>6 more months to "implement phase one"</li>
+            </ul>
+            
+            <p>Meanwhile, Google's algorithm has evolved three times.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">Why Most Agencies Can't Keep Up</h3>
+            
+            <p><strong>Traditional SEO agencies</strong> are like cruise ships. Changing direction takes forever. By the time they've updated their playbooks and retrained their teams... Google's moved on.</p>
+            
+            <p><strong>Full-service marketing firms</strong> treat SEO like one dish at a buffet. They're juggling social media, PPC, email marketing – SEO gets maybe 10% of their attention. Google changes 100% of its algorithm.</p>
+            
+            <p><strong>Offshore SEO farms</strong> are still using tactics from 2019. They promise 1,000 backlinks but can't explain why your traffic keeps dropping. They're optimizing for a Google that no longer exists.</p>
+            
+            <p><strong>Even good technical SEO agencies</strong> are stuck in the old paradigm:</p>
+            <ul style="line-height: 1.8;">
+                <li>They're still optimizing for keywords while Google's rewarding intent</li>
+                <li>They're building backlinks while Google's analyzing user behavior</li>
+                <li>They're focused on technical checkboxes while Google's gone full AI</li>
+            </ul>
+            
+            <p><strong>The boutique specialists</strong> get it, but they're booked solid. Three month waitlists. Premium prices. Great if you can wait, but Google won't pause its evolution for your timeline.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">We're Built Different</h3>
+            
+            <p>We're not a cruise ship. We're a speedboat.</p>
+            
+            <p>We're not trying to be everything to everyone. We're a Google-first rapid response team.</p>
+            
+            <ul style="line-height: 1.8;">
+                <li>No board meetings to approve common sense</li>
+                <li>No 6-month roadmaps for 6-day fixes</li>
+                <li>No committees debating while your rankings tank</li>
+            </ul>
+            
+            <p>We've spent the last 8 months inside Google's new ecosystem. Not theorizing about it. Not reading about it. Actually testing what works NOW.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">Here's Your Advantage</h3>
+            
+            <p>Your competitors are stuck with the same slow-moving agencies. They'll spend the next year in meetings discussing the "digital transformation strategy."</p>
+            
+            <p>You could be on page one before they finish their first quarterly review.</p>
+            
+            <p>We implement in days what takes them months. Because we've already done the learning. We know exactly what Google wants TODAY, not what worked in 2023.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">The Timeline That Matters</h3>
+            
+            <p>In 6-8 months, sites optimized for the old Google will become invisible. Not slowly. Not gradually. Overnight.</p>
+            
+            <p>The agencies will blame "algorithm updates" and propose another 6-month strategy. You'll be competing with companies half your size who adapted early.</p>
+            
+            <p>Or...</p>
+            
+            <p>You work with a team that's already adapted. No learning curve. No trial and error. Just results based on what's actually working in Google's new reality.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">The Bottom Line</h3>
+            
+            <p>You don't need another agency. You need a nimble partner who's already where Google is heading.</p>
+            
+            <p>While others are having meetings about having meetings, we're implementing. While they're creating proposals, we're creating rankings.</p>
+            
+            <p>Your audit shows {{{{critical_count}}}} critical issues. We can fix them all. But more importantly, we can fix them for the Google that's coming, not the Google that's leaving.</p>
+            
+            <hr style="margin: 40px 0;">
+            
+            <p style="font-style: italic; color: #666;"><strong>P.S.</strong> – Every week you wait is another week a smaller, faster competitor moves ahead of you. Not because they're smarter. Because they moved faster.</p>
         """,
-        "low": f"""
-            <h2 style='color:#e53935;'>{{userName}}, Your Site Is Invisible to 97% of Customers</h2>
-            <div style='background:#e53935;color:#fff;padding:20px;margin:20px 0;'>
-                <strong>Brutal truth:</strong> You're losing about <strong>${revenue_impact:,}/mo</strong> right now.
+        
+        'low': f"""
+            <h2 style="color: #333; font-size: 28px; font-weight: 600; margin-bottom: 10px;">{{{{businessName}}}}, Google Overlooked Your Website {{{{googleOverlooks}}}} Times Last Month</h2>
+            
+            <p style="font-size: 18px; color: #555; margin-bottom: 20px;">Your SEO audit revealed <strong style="color: #d32f2f;">{{{{critical_count}}}} critical issues</strong> that explain why you're invisible to Google's new algorithm.</p>
+            
+            <div style="background: #ffebee; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h3 style="margin-top: 0; color: #d32f2f;">Critical Issues Found:</h3>
+                {{{{critical_issues}}}}
             </div>
-            <h3>{{critical_count}} severe problems detected</h3>
-            {{critical_issues}}
-            <p>Every day you wait, the gap widens.</p>
-            {{product_offer}}
-            {{testimonials}}
-        """,
+            
+            <p style="font-size: 16px; line-height: 1.6;">Your score of {{{{score}}}}/100 tells a story. But it's not the story you think.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">The Real Problem</h3>
+            
+            <p>These issues aren't just hurting your rankings. They're symptoms of a bigger problem: Your site is optimized for a version of Google that no longer exists.</p>
+            
+            <p>Google's search algorithm isn't just updating anymore – it's transforming. And most SEO agencies are about as prepared as Blockbuster was for Netflix.</p>
+            
+            <p>Your current agency isn't failing you intentionally. They're just... slow.</p>
+            
+            <p>Think about it:</p>
+            <ul style="line-height: 1.8;">
+                <li>They need 3 months to "analyze" your situation</li>
+                <li>Another 3 months to get "stakeholder buy-in"</li>
+                <li>6 more months to "implement phase one"</li>
+            </ul>
+            
+            <p>Meanwhile, Google's algorithm has evolved three times. And your rankings have dropped each time.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">Why Most Agencies Can't Keep Up</h3>
+            
+            <p><strong>Traditional SEO agencies</strong> are like cruise ships. Changing direction takes forever. By the time they've updated their playbooks and retrained their teams... Google's moved on.</p>
+            
+            <p><strong>Full-service marketing firms</strong> treat SEO like one dish at a buffet. They're juggling social media, PPC, email marketing – SEO gets maybe 10% of their attention. Google changes 100% of its algorithm.</p>
+            
+            <p><strong>Offshore SEO farms</strong> are still using tactics from 2019. They promise 1,000 backlinks but can't explain why your traffic keeps dropping. They're optimizing for a Google that no longer exists.</p>
+            
+            <p><strong>Even good technical SEO agencies</strong> are stuck in the old paradigm:</p>
+            <ul style="line-height: 1.8;">
+                <li>They're still optimizing for keywords while Google's rewarding intent</li>
+                <li>They're building backlinks while Google's analyzing user behavior</li>
+                <li>They're focused on technical checkboxes while Google's gone full AI</li>
+            </ul>
+            
+            <h3 style="color: #333; margin-top: 30px;">We're Built Different</h3>
+            
+            <p>We're not a cruise ship. We're a speedboat.</p>
+            
+            <p>We're not trying to be everything to everyone. We're a Google-first rapid response team.</p>
+            
+            <ul style="line-height: 1.8;">
+                <li>No board meetings to approve common sense</li>
+                <li>No 6-month roadmaps for 6-day fixes</li>
+                <li>No committees debating while your rankings tank</li>
+            </ul>
+            
+            <p>We've spent the last 8 months inside Google's new ecosystem. Not theorizing about it. Not reading about it. Actually testing what works NOW.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">Your Choice</h3>
+            
+            <p>You have two options:</p>
+            
+            <p><strong>Option 1:</strong> Stick with traditional SEO. Watch your rankings continue to slide. Blame algorithm updates. Repeat.</p>
+            
+            <p><strong>Option 2:</strong> Work with a team that's already adapted. Skip the learning curve. Start ranking for the Google that's coming, not the Google that's leaving.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">The Timeline That Matters</h3>
+            
+            <p>In 6-8 months, sites optimized for the old Google will become invisible. Not slowly. Not gradually. Overnight.</p>
+            
+            <p>You're already behind. But you're not out of the race. Yet.</p>
+            
+            <h3 style="color: #333; margin-top: 30px;">The Bottom Line</h3>
+            
+            <p>You don't need another agency. You need a nimble partner who's already where Google is heading.</p>
+            
+            <p>Your audit shows {{{{critical_count}}}} critical issues. We can fix them all. But more importantly, we can fix them for the Google that's coming, not the Google that's leaving.</p>
+            
+            <hr style="margin: 40px 0;">
+            
+            <p style="font-style: italic; color: #666;"><strong>P.S.</strong> – Every week you wait is another week a smaller, faster competitor moves ahead of you. Not because they're smarter. Because they moved faster.</p>
+        """
     }
-    return templates.get(segment, templates["medium"])
+    return templates.get(segment, templates['medium'])
 
 
-def _personalise_subject_line(audit_data: Dict[str, str]) -> str:
-    """Generate an urgency‑driven subject line."""
-    score = audit_data.get("overall_score", 0)
-    website = audit_data.get("website_url", audit_data.get("websiteUrl", ""))
-    competitors = audit_data.get("top_competitors", [])
-
-    visitor_value = audit_data.get("visitor_value", VISITOR_VALUE_USD)
-    revenue_loss = audit_data.get("estimated_monthly_revenue_loss", audit_data.get("estimated_monthly_traffic_loss", 0) * visitor_value)
-
-    subjects: Dict[str, List[str]] = {
-        "high": [
-            f"⚠️ {competitors[0] if competitors else 'Competitor'} just leap‑frogged you on Google",
-            f"You're leaking ${revenue_loss:,}/mo – quick win inside",
-            f"Good & bad news about {website}'s SEO",
+def personalize_subject_line(template: str, data: Dict[str, str]) -> str:
+    """Create Ogilvy-style subject lines - clear, honest, and benefit-driven"""
+    # Check if it's a legacy call with just websiteUrl
+    if 'websiteUrl' in data and 'overall_score' not in data:
+        return template.replace('{{websiteUrl}}', data['websiteUrl'])
+    
+    score = data.get('overall_score', 0)
+    website = data.get('website_url', data.get('websiteUrl', ''))
+    critical_count = data.get('critical_count', len(data.get('critical_issues', [])))
+    
+    # Ogilvy-style: specific, factual, benefit-oriented
+    subject_lines = {
+        'high': [
+            f"Your SEO audit found {critical_count} ways to improve {website}",
+            f"{website} SEO Report: Good foundation, room to grow",
+            f"How {website} can capture more search traffic"
         ],
-        "medium": [
-            f"🚨 {website} has {audit_data.get('critical_count', 0)} urgent SEO issues",
-            f"Your SEO score: {score}/100 (peers average 85)",
-            "Warning: 67% of your customers can't find you",
+        'medium': [
+            f"{critical_count} specific fixes to improve {website}'s search ranking",
+            f"Your SEO audit revealed opportunities for {website}",
+            f"{website}: Your roadmap to better search visibility"
         ],
-        "low": [
+        'low': [
+            f"Why customers can't find {website} (and how to fix it)",
+            f"{website} SEO audit: {critical_count} critical improvements needed",
+            f"Your plan to improve {website}'s search performance"
+        ]
+    }
+    
+    segment = 'high' if score >= 80 else 'medium' if score >= 60 else 'low'
+    return subject_lines[segment][0]# New dynamic subject line generation
+    score = data.get('overall_score', 0)
+    website = data.get('website_url', data.get('websiteUrl', ''))
+    competitors = data.get('top_competitors', [])
+    
+    # Calculate revenue loss if not provided
+    visitor_value = data.get('visitor_value', VISITOR_VALUE_USD)
+    estimated_revenue_loss = data.get('estimated_monthly_revenue_loss', 
+                                     data.get('estimated_monthly_traffic_loss', 100) * visitor_value)
+    
+    subject_lines = {
+        'high': [
+            f"⚠️ {competitors[0] if competitors else 'Your competitor'} just passed you on Google",
+            f"You're losing ${estimated_revenue_loss:,}/mo (quick fix inside)",
+            f"Good news/Bad news about {website}'s SEO"
+        ],
+        'medium': [
+            f"🚨 Critical: {website} has {data.get('critical_count', len(data.get('critical_issues', [])))} urgent SEO issues",
+            f"Your SEO score: {score}/100 (competitors average: 85)",
+            f"Warning: You're invisible to 67% of your customers"
+        ],
+        'low': [
             f"URGENT: {website} is practically invisible on Google",
-            f"Emergency – site scored {score}/100 (industry min 70)",
-            "🔴 Competitors are stealing your customers (proof inside)",
-        ],
+            f"Emergency: Your site scored {score}/100 (industry minimum: 70)",
+            f"🔴 {competitors[0] if competitors else 'Your competitors'} are stealing your customers (proof inside)"
+        ]
     }
-    segment = _get_score_segment(score)
-    return random.choice(subjects[segment])
+    
+    segment = 'high' if score >= 80 else 'medium' if score >= 60 else 'low'
+    chosen_subject = random.choice(subject_lines[segment])
+    
+    # If no dynamic subject was chosen, fall back to template
+    if not chosen_subject:
+        return template.replace('{{websiteUrl}}', website)
+    
+    return chosen_subject
 
 
-# ---------------------------------------------------------------------------
-# Secondary helpers ---------------------------------------------------------
-# ---------------------------------------------------------------------------
-
-def _generate_testimonial_html(testimonials: List[Dict[str, str]]) -> str:
-    blocks = []
-    for t in testimonials:
-        blocks.append(
-            f"""
-            <div class='testimonial'>
-                <p style='font-style:italic'>&ldquo;{html.escape(t['text'])}&rdquo;</p>
-                <p>— {html.escape(t['author'])}, {html.escape(t['company'])}</p>
-            </div>
-            """
-        )
-    return "\n".join(blocks)
+def personalize_email_body(template: str, data: Dict[str, str]) -> str:
+    # Replace all placeholders
+    for key, value in data.items():
+        template = template.replace(f'{{{{{key}}}}}', str(value))
+    return template
 
 
-def _generate_dynamic_testimonials(audit_data: Dict) -> str:
-    """Return a single testimonial tuned to the main issue."""
-    default_testimonials = [
+def generate_testimonial_html() -> str:
+    testimonials = [
         {
-            "text": "Thorough audit – spotted issues we missed. Traffic up 2× in a month!",
+            "text": "The SEO audit provided by this tool was extremely thorough and insightful. It helped us identify critical issues we had overlooked. Highly recommend!",
             "author": "Jane Smith",
-            "company": "Acme Inc.",
+            "company": "Acme Inc."
         },
         {
-            "text": "Actionable and fast. Rankings jumped from page 5 to #2.",
+            "text": "Thanks to the recommendations from the audit report, we were able to significantly improve our search engine rankings and organic traffic.",
             "author": "John Doe",
-            "company": "XYZ Corp",
-        },
+            "company": "XYZ Corp"
+        }
     ]
 
-    map_by_issue = {
-        "page_speed": {
-            "text": "Load time dropped from 8s to 1.9s – conversions up 47% in 3 weeks.",
+    snippet = ""
+    for t in testimonials:
+        snippet += f'''
+            <div class="testimonial">
+                <p class="testimonial-text">"{t['text']}"</p>
+                <p class="testimonial-author">– {t['author']}, {t['company']}</p>
+            </div>
+        '''
+    return snippet
+
+
+def generate_dynamic_testimonials(audit_data: Dict) -> str:
+    """Generate testimonials relevant to the specific issues found"""
+    if not audit_data:
+        return generate_testimonial_html()
+    
+    industry = audit_data.get('industry', 'business')
+    main_issue = audit_data.get('main_technical_issue', '')
+    
+    # Map issues to relevant testimonials
+    testimonial_map = {
+        'page_speed': {
+            "text": "Our page load time went from 8 seconds to under 2 seconds. Conversions increased by 47% in just 3 weeks!",
             "author": "Michael Chen",
-            "company": "FastTech",
+            "company": "FastTech Solutions",
+            "result": "+47% conversions"
         },
-        "mobile_optimization": {
-            "text": "Mobile traffic tripled after fixes – revenue 3×.",
-            "author": "Sarah Johnson",
-            "company": "MobileFirst",
+        'mobile_optimization': {
+            "text": "We were losing 65% of mobile traffic. After their fixes, our mobile rankings shot up and revenue increased 3x.",
+            "author": "Sarah Johnson", 
+            "company": "MobileFirst Inc",
+            "result": "3x revenue increase"
         },
-        "technical_seo": {
-            "text": "Indexing issues solved in 48h – traffic doubled in 30 days.",
+        'technical_seo': {
+            "text": "They found indexing issues we never knew existed. Fixed them in 2 days and our traffic doubled within a month.",
             "author": "David Park",
             "company": "TechCorp",
-        },
+            "result": "2x traffic in 30 days"
+        }
     }
-
-    main_issue = audit_data.get("main_technical_issue", "")
-    chosen = map_by_issue.get(main_issue, random.choice(default_testimonials))
-
-    return _generate_testimonial_html([chosen])
-
-
-def _generate_offer_html(audit_data: Dict | None = None) -> str:
-    """Return the upsell block – static fallback, dynamic when audit_data supplied."""
-    if audit_data is None:
-        return (
-            "<hr><p>Want hands‑on help fixing these issues? <a href='" + BOOKING_URL + "'>Book your free 30‑min strategy call</a></p>"
-        )
-
-    score = audit_data.get("overall_score", 0)
-    main_issue = html.escape(audit_data.get("main_technical_issue", "SEO issues"))
-
-    if score >= 80:
-        urgency, benefit = ("Lock in your advantage", "stay ahead while rivals play catch‑up")
-    elif score >= 60:
-        urgency, benefit = ("Stop bleeding traffic", "win back lost visitors in 60 days")
+    
+    # Validate main_issue against available keys
+    if main_issue and main_issue in testimonial_map:
+        relevant = testimonial_map[main_issue]
     else:
-        urgency, benefit = ("Emergency SEO rescue", "save your online presence before it's too late")
-
-    industry = html.escape(audit_data.get("industry", "your industry"))
-
+        # Default testimonial
+        relevant = {
+            "text": f"Best SEO investment we made. Went from page 5 to #2 on Google for our main {industry} keywords.",
+            "author": "Jennifer Smith",
+            "company": f"Leading {industry} Company",
+            "result": "Page 5 to #2 on Google"
+        }
+    
     return f"""
-        <div style='background:#f5f5f5;padding:30px;margin:30px 0;text-align:center;'>
-            <h2 style='color:#2e7d32;margin-top:0;'>{urgency}</h2>
-            <p>Our team fixes {main_issue} for {industry} sites. We'll help you <strong>{benefit}</strong>.</p>
-            <a href='{BOOKING_URL}?score={score}&issue={main_issue}' style='display:inline-block;background:#2e7d32;color:#fff;padding:14px 28px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:1.1em;'>
-                Claim My Free Strategy Call (${STRATEGY_CALL_VALUE} value)
-            </a>
-            <p style='font-size:0.9em;color:#666;margin-top:15px'>No card required • 30 min • Actionable advice</p>
+        <div style="background: #e8f5e9; padding: 20px; margin: 20px 0; border-left: 4px solid #4caf50;">
+            <p style="font-style: italic; margin: 0;">"{relevant['text']}"</p>
+            <p style="margin: 10px 0 0 0; font-weight: bold;">
+                — {relevant['author']}, {relevant['company']} 
+                <span style="color: #2e7d32;">({relevant['result']})</span>
+            </p>
         </div>
     """
 
-# ---------------------------------------------------------------------------
-# End of file ---------------------------------------------------------------
+
+def generate_offer_html(audit_data: Dict = None) -> str:
+    """Generate dynamic offer based on audit findings"""
+    if audit_data is None:
+        return f"""
+            <hr style="margin:2rem 0;">
+            <h3 style="color:#2e7d32;">Boost Your SEO Further – Let Us Fix These Issues for You</h3>
+            <p>Our expert team can implement every recommendation in this report and lift your rankings in record time.  
+            Click the button below for a 30-minute strategy call (normally ${STRATEGY_CALL_VALUE} – free for the next 48 hours).</p>
+            <a href="{BOOKING_URL}" style="
+                display:inline-block;
+                background:#2e7d32;
+                color:#fff;
+                padding:12px 24px;
+                border-radius:6px;
+                text-decoration:none;
+                font-weight:bold;">
+                Book My Free Strategy Call
+            </a>
+        """
+    
+    # Dynamic offer based on audit data
+    score = audit_data.get('overall_score', 0)
+    main_issue = html.escape(audit_data.get('main_technical_issue', 'SEO issues'))
+    industry = html.escape(audit_data.get('industry', 'businesses in your industry'))
+    
+    if score >= 80:
+        urgency = "Lock in your competitive advantage"
+        benefit = "stay ahead of competitors who are catching up"
+    elif score >= 60:
+        urgency = "Stop losing customers to competitors"
+        benefit = "reclaim your lost traffic in 30-60 days"
+    else:
+        urgency = "Emergency SEO rescue needed"
+        benefit = "save your online presence before it's too late"
+    
+    return f"""
+        <div style="background: #f5f5f5; padding: 30px; margin: 30px 0; text-align: center;">
+            <h2 style="color: #2e7d32; margin-top: 0;">{urgency}</h2>
+            
+            <p style="font-size: 1.1em;">Our SEO Emergency Response Team specializes in fixing {main_issue}. 
+            We'll help you <strong>{benefit}</strong>.</p>
+            
+            <div style="background: white; padding: 20px; margin: 20px 0; border: 2px dashed #2e7d32;">
+                <p style="margin: 0; font-size: 1.2em;"><strong>🎯 What you'll get in 30 minutes:</strong></p>
+                <ul style="text-align: left; display: inline-block;">
+                    <li>Exact step-by-step fix for your #1 SEO problem</li>
+                    <li>Competitor backlink sources you can steal</li>
+                    <li>Quick wins that show results in 7 days</li>
+                    <li>Custom 90-day roadmap to dominate your market</li>
+                </ul>
+            </div>
+            
+            <p style="color: #e53935; font-weight: bold; font-size: 1.1em;">
+                ⏰ Only 3 spots left this week (2 already booked by {industry})
+            </p>
+            
+            <a href="{BOOKING_URL}?score={score}&issue={main_issue}" 
+               style="display:inline-block; background:#2e7d32; color:#fff; padding:16px 32px; 
+                      border-radius:6px; text-decoration:none; font-weight:bold; font-size:1.2em;">
+                Claim My Free Strategy Call{f' (${STRATEGY_CALL_VALUE} Value)' if STRATEGY_CALL_VALUE != '0' else ''}
+            </a>
+            
+            <p style="margin-top: 15px; font-size: 0.9em; color: #666;">
+                No credit card required • 100% free • Guaranteed actionable advice
+            </p>
+        </div>
+    """
+
+
+# ---------- End of file ----------

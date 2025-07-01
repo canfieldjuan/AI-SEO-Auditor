@@ -4,6 +4,7 @@
 import os
 import time
 import threading
+from typing import Dict  # ADD THIS LINE - THIS IS THE FIX
 from flask import Blueprint, request, jsonify, send_file
 from services.seo_auditor import SEOAuditor
 from services.cache_service import cache

@@ -40,13 +40,13 @@ def analyze_with_ai(website_data: Dict) -> Dict:
             "schema_markup": 0-100
         }},
         "critical_issues": [
-            "Specific critical issues found"
+            "Specific critical issues found (list 3-5 major problems)"
         ],
         "warnings": [
             "Important issues to address"
         ],
         "recommendations": [
-            "Specific actionable recommendations"
+            "Specific actionable recommendations (list 3-5 key fixes)"
         ],
         "ai_search_issues": [
             "Issues specifically related to AI search visibility"
@@ -62,7 +62,12 @@ def analyze_with_ai(website_data: Dict) -> Dict:
             "content_analysis": "Analysis of content quality and structure",
             "schema_analysis": "Analysis of structured data implementation",
             "ai_readiness_analysis": "How well the site works with AI search"
-        }}
+        }},
+        "estimated_monthly_traffic_loss": 1000-10000 (estimate based on issues severity),
+        "industry": "detected industry (e.g., e-commerce, technology, healthcare, etc.)",
+        "main_technical_issue": "primary issue category (e.g., page_speed, mobile_optimization, technical_seo, content_quality)",
+        "top_competitors": ["competitor1.com", "competitor2.com"] (infer 2-3 based on industry),
+        "visitor_value": 50 (estimated $ value per visitor based on industry)
     }}
     
     Focus on:
@@ -72,6 +77,16 @@ def analyze_with_ai(website_data: Dict) -> Dict:
     4. Content that answers questions naturally
     5. Technical SEO fundamentals
     6. Semantic content structure
+    
+    For estimated_monthly_traffic_loss:
+    - Score 80-100: estimate 500-2000 lost visitors
+    - Score 60-79: estimate 2000-5000 lost visitors  
+    - Score 40-59: estimate 5000-10000 lost visitors
+    - Score 0-39: estimate 10000+ lost visitors
+    
+    For industry detection, analyze the content and determine the primary business sector.
+    
+    For main_technical_issue, identify the most severe problem category affecting the site.
     """
     
     # Try OpenAI first
@@ -139,10 +154,12 @@ def generate_fallback_analysis(website_data: Dict) -> Dict:
     # Basic checks
     if not website_data.get('title'):
         issues.append("Missing title tag")
+        recommendations.append("Add a unique, descriptive title tag to your homepage")
         score -= 10
     
     if not website_data.get('meta_description'):
         issues.append("Missing meta description")
+        recommendations.append("Add compelling meta descriptions to all pages")
         score -= 10
     
     if not website_data.get('has_schema'):
@@ -152,11 +169,30 @@ def generate_fallback_analysis(website_data: Dict) -> Dict:
     
     if website_data.get('images_without_alt', 0) > 0:
         issues.append(f"{website_data['images_without_alt']} images missing alt text")
+        recommendations.append("Add descriptive alt text to all images")
         score -= 5
     
     if not website_data.get('ssl_certificate'):
         issues.append("No SSL certificate detected")
+        recommendations.append("Install SSL certificate for secure browsing")
         score -= 10
+    
+    # Determine main technical issue based on what we found
+    main_issue = "technical_seo"  # default
+    if not website_data.get('has_schema'):
+        main_issue = "schema_markup"
+    elif not website_data.get('ssl_certificate'):
+        main_issue = "security"
+    
+    # Estimate traffic loss based on score
+    if score >= 80:
+        traffic_loss = 1000
+    elif score >= 60:
+        traffic_loss = 3000
+    elif score >= 40:
+        traffic_loss = 7000
+    else:
+        traffic_loss = 12000
     
     return {
         "overall_score": max(0, score),
@@ -167,9 +203,9 @@ def generate_fallback_analysis(website_data: Dict) -> Dict:
             "voice_search": max(0, score - 15),
             "schema_markup": 30 if website_data.get('has_schema') else 0
         },
-        "critical_issues": issues,
+        "critical_issues": issues[:5],  # Limit to 5
         "warnings": [],
-        "recommendations": recommendations,
+        "recommendations": recommendations[:5],  # Limit to 5
         "ai_search_issues": ["Limited AI search visibility due to missing structured data"],
         "voice_search_issues": ["Content not optimized for conversational queries"],
         "quick_wins": ["Add missing alt text to images", "Implement basic schema markup"],
@@ -178,5 +214,11 @@ def generate_fallback_analysis(website_data: Dict) -> Dict:
             "content_analysis": "Basic content analysis completed",
             "schema_analysis": "Schema markup analysis completed",
             "ai_readiness_analysis": "Basic AI readiness assessment completed"
-        }
+        },
+        # New fields for email
+        "estimated_monthly_traffic_loss": traffic_loss,
+        "industry": "general business",  # Default fallback
+        "main_technical_issue": main_issue,
+        "top_competitors": ["competitor1.com", "competitor2.com"],  # Generic fallback
+        "visitor_value": 50  # Default $50 per visitor
     }
